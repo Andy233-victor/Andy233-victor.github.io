@@ -3,360 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>尼尔·布伦纳「新国家空间」理论深度综述</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>新国家空间理论 (New State Space) 深度全景图解</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@300;400;600;700&display=swap');
-        
         :root {
-            --primary: #1e293b;
-            --accent: #0f172a;
-            --highlight: #0ea5e9;
-            --theory-bg: #f8fafc;
+            --primary-color: #1a365d; /* 深海蓝 */
+            --secondary-color: #2b6cb0; /* 亮蓝 */
+            --accent-color: #dd6b20; /* 强调橙 */
+            --bg-color: #f7fafc;
+            --text-color: #2d3748;
+            --text-muted: #718096;
+            --border-color: #e2e8f0;
+            --card-bg: #ffffff;
         }
-
-        body { 
-            font-family: 'Inter', 'Noto Serif SC', serif; 
-            scroll-behavior: smooth;
-        }
-
-        .sidebar-link.active {
-            color: var(--highlight);
-            border-left-color: var(--highlight);
-            background-color: #f1f5f9;
-        }
-
-        .term-card:hover { transform: translateY(-4px); }
         
-        /* 针对打印和长阅读优化的样式 */
-        .academic-text { line-height: 1.8; text-align: justify; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        header h1 { margin: 0; font-size: 2.4rem; letter-spacing: 1px; }
+        header p { margin-top: 10px; font-size: 1.1rem; color: #e2e8f0; font-weight: 300; }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background-color: #edf2f7;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            flex: 1;
+            min-width: 150px;
+            background-color: transparent;
+            color: var(--text-muted);
+            border: none;
+            outline: none;
+            padding: 1.2rem 1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button:hover { color: var(--secondary-color); background-color: #e2e8f0; }
         
-        pre { white-space: pre-wrap; word-wrap: break-word; }
+        .tab-button.active {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            background-color: var(--card-bg);
+        }
+
+        /* Tab Content */
+        .tab-content { display: none; padding: 2.5rem; animation: fadeIn 0.4s ease-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+        
+        h3 { color: var(--secondary-color); font-size: 1.4rem; margin-top: 30px; }
+
+        /* Accordion (Collapsible) */
+        .accordion {
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .accordion-header {
+            background-color: #f8fafc;
+            color: var(--primary-color);
+            cursor: pointer;
+            padding: 16px 24px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            font-size: 1.15rem;
+            font-weight: bold;
+            transition: background 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .accordion-header:hover { background-color: #edf2f7; }
+        .accordion-header.active { background-color: var(--secondary-color); color: white; }
+
+        .accordion-content {
+            padding: 0 24px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+        }
+        
+        .accordion-header.active + .accordion-content { padding: 20px 24px; }
+
+        /* Cards & Grids */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--secondary-color);
+            padding: 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+        }
+        
+        .card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+        .card h4 { margin-top: 0; color: var(--secondary-color); font-size: 1.2rem; }
+
+        /* Highlight Boxes */
+        .info-box {
+            background-color: #fffaf0;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 6px 6px 0;
+        }
+        
+        .info-box strong { color: #c05621; }
+        .highlight { font-weight: bold; color: var(--accent-color); }
+        
+        /* Logic Flow Chart CSS */
+        .flow-container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; margin: 30px 0; padding: 20px; background: #f1f5f9; border-radius: 8px; }
+        .flow-step { flex: 1; text-align: center; padding: 15px; background: white; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); min-width: 200px; margin: 10px; border: 1px solid var(--border-color); }
+        .flow-arrow { font-size: 24px; color: var(--text-muted); font-weight: bold; }
+        .flow-step h4 { color: var(--primary-color); margin-bottom: 10px; margin-top: 0;}
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body>
 
-    <div class="lg:hidden bg-slate-900 text-white p-4 sticky top-0 z-50 flex justify-between items-center">
-        <span class="font-bold">NSS 理论综述</span>
-        <button id="menuBtn" class="p-2">☰</button>
-    </div>
+    <header>
+        <h1>新国家空间理论 (New State Space)</h1>
+        <p>突破“领域陷阱”：全球化时代国家权力的空间化重构与尺度政治</p>
+    </header>
 
-    <div class="flex">
-        <nav id="sidebar" class="hidden lg:block w-72 h-screen sticky top-0 bg-white border-r border-slate-200 overflow-y-auto p-6 transition-all">
-            <div class="mb-10">
-                <h1 class="text-xl font-black text-slate-900 leading-tight">New State Spaces</h1>
-                <p class="text-xs text-slate-500 mt-2 uppercase tracking-widest">Neil Brenner Theory Review</p>
-            </div>
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'tab-intro')">一、理论溯源与背景</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-framework')">二、核心分析框架</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-process')">三、重组与演化机制</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-concepts')">四、专有名词深度解析</button>
+            <button class="tab-button" onclick="openTab(event, 'tab-china')">五、实证与空间实践</button>
+        </div>
 
-            <div class="space-y-1 text-sm">
-                <a href="#intro" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">一、提出者与核心文献</a>
-                <a href="#background" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">二、理论提出背景</a>
-                <a href="#definition" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">三、理论核心定位</a>
-                <a href="#framework" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">四、理论主要内容</a>
-                <a href="#terminology" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">五、核心专有名词释义</a>
-                <a href="#logic" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">六、理论内部层次逻辑</a>
-                <a href="#cases" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">七、典型应用案例</a>
-                <a href="#impact" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">八、理论贡献与影响</a>
-                <a href="#limitations" class="sidebar-link block py-2 px-3 border-l-2 border-transparent hover:bg-slate-50 transition-all">九、局限与后续发展</a>
-            </div>
-        </nav>
-
-        <main class="flex-1 max-w-5xl mx-auto px-6 lg:px-12 py-12">
+        <div id="tab-intro" class="tab-content active">
+            <h2>一、理论提出背景与学术渊源</h2>
+            <p>“新国家空间理论”（NSS）由著名城市与政治地理学者 <strong>Neil Brenner（尼尔·布伦纳）</strong> 在20世纪末至21世纪初系统建构。该理论的提出，旨在回应全球化浪潮下关于“民族国家是否正在衰落/空心化”的激烈学术争论。</p>
             
-            <header class="mb-20">
-                <div class="inline-block px-3 py-1 bg-sky-100 text-sky-700 text-xs font-bold rounded-full mb-4">学术综述手册</div>
-                <h2 class="text-4xl lg:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">尼尔·布伦纳「新国家空间」理论系统梳理</h2>
-                <p class="text-lg text-slate-600 max-w-3xl academic-text italic border-l-4 border-slate-200 pl-6">
-                    “国家转型即空间转型。本综述旨在解析全球化背景下国家如何通过尺度重组与空间选择性重构自身权力场域。”
-                </p>
-            </header>
-
-            <section id="intro" class="mb-24 scroll-mt-10">
-                <h3 class="text-2xl font-bold text-slate-900 mb-8 pb-2 border-b-2 border-slate-100 flex items-center">
-                    <span class="mr-3 text-sky-500">01</span> 理论提出者与核心文献
-                </h3>
-                <div class="grid md:grid-cols-2 gap-8">
-                    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                        <div class="text-sky-600 font-bold mb-2">学者简介 / Scholar</div>
-                        <h4 class="text-xl font-bold mb-4">尼尔·布伦纳 (Neil Brenner)</h4>
-                        <ul class="space-y-3 text-sm text-slate-600">
-                            <li>• 当代西方批判政治地理学领军者，哈佛大学教授。</li>
-                            <li>• 师承大卫·哈维、鲍勃·杰索普，融合马克思主义政治经济学。</li>
-                            <li>• 核心研究领域：国家空间重构、尺度政治、城市治理。</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl">
-                        <div class="text-sky-400 font-bold mb-2">核心著作 / Literature</div>
-                        <h4 class="text-lg font-bold mb-4">《New State Spaces》 (2004)</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed mb-4">牛津大学出版社出版。标志着该理论正式成型与体系化。重点讨论了城市治理与国家地位的尺度重组。</p>
-                        <div class="space-y-2">
-                            <div class="text-[10px] uppercase tracking-tighter text-slate-500">其他补充文献</div>
-                            <p class="text-xs italic">State/Space: A Reader (2003)</p>
-                        </div>
-                    </div>
+            <div class="card-grid">
+                <div class="card" style="border-top-color: #48bb78;">
+                    <h4>1. 时代背景：从福特主义到新自由主义</h4>
+                    <p>20世纪70年代，西方资本主义陷入“滞胀”危机。建立在“全国均衡化分配”基础上的<strong>福特-凯恩斯主义</strong>宣告破产。为了应对全球化竞争和资本外流，国家被迫放弃全国均衡发展，转而采取<strong>新自由主义</strong>政策，将资源集中于少数核心城市与区域以参与全球竞争。</p>
                 </div>
-            </section>
-
-            <section id="background" class="mb-24 scroll-mt-10">
-                <h3 class="text-2xl font-bold text-slate-900 mb-8 pb-2 border-b-2 border-slate-100 flex items-center">
-                    <span class="mr-3 text-sky-500">02</span> 理论提出背景
-                </h3>
-                <div class="grid gap-6">
-                    <div class="flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0 text-sky-500 font-bold">1</div>
-                        <div>
-                            <h5 class="font-bold text-slate-900 mb-1">资本主义空间组织转型</h5>
-                            <p class="text-sm text-slate-600 academic-text">70年代后福特主义转向，资本积累从“国家内向型”走向“全球流动型”，传统国家“容器”功能失效。</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0 text-sky-500 font-bold">2</div>
-                        <div>
-                            <h5 class="font-bold text-slate-900 mb-1">传统国家理论的「空间缺失」</h5>
-                            <p class="text-sm text-slate-600 academic-text">经典理论偏重权力与阶级，忽视空间。无法解释为何国家会“策略性地”倾斜扶持特定区域。</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-6 items-start">
-                        <div class="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center shrink-0 text-sky-500 font-bold">3</div>
-                        <div>
-                            <h5 class="font-bold text-slate-900 mb-1">现实治理危机：去国家化 vs 再国家化</h5>
-                            <p class="text-sm text-slate-600 academic-text">全球化带来权力外溢的同时，国家正通过重塑空间夺回竞争力。这一悖论催生了新解释框架。</p>
-                        </div>
-                    </div>
+                <div class="card" style="border-top-color: #4299e1;">
+                    <h4>2. 认识论批判：打破“领土陷阱”</h4>
+                    <p>传统政治学陷入了 <strong>“领土陷阱 (Territorial Trap)”</strong> 或 <strong>“方法论的民族主义”</strong>：将国家预设为一个拥有固定边界、内部匀质的“静态容器 (Container)”。NSS 激烈批判这一观点，强调国家空间是社会政治斗争不断塑造的“动态过程 (Process)”。</p>
                 </div>
-            </section>
+            </div>
 
-            <section id="framework" class="mb-24 scroll-mt-10">
-                <h3 class="text-2xl font-bold text-slate-900 mb-8 pb-2 border-b-2 border-slate-100 flex items-center">
-                    <span class="mr-3 text-sky-500">03</span> 理论框架与本体论
-                </h3>
-                <div class="grid md:grid-cols-2 gap-12">
-                    <div class="space-y-8">
-                        <div>
-                            <h4 class="font-black text-slate-400 uppercase text-xs mb-4">Ontology / 本体论</h4>
-                            <p class="text-sm text-slate-700 leading-relaxed font-semibold">国家空间不是给定的地理容器，而是社会建构的过程，是资本、权力和斗争不断重组的结果。</p>
-                        </div>
-                        <div class="p-6 bg-sky-50 rounded-2xl">
-                            <h4 class="font-black text-sky-600 uppercase text-xs mb-4">Mechanism / 核心机制</h4>
-                            <ul class="space-y-4">
-                                <li class="text-sm">
-                                    <span class="font-bold block text-slate-900">1. 国家空间选择性 (Selectivity)</span>
-                                    <span class="text-slate-600">资源分配的偏袒性与目的性。</span>
-                                </li>
-                                <li class="text-sm">
-                                    <span class="font-bold block text-slate-900">2. 尺度重组 (Rescaling)</span>
-                                    <span class="text-slate-600">权力在不同空间层级的位移表现。</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-slate-400 uppercase text-xs mb-4">Analysis Tool / TPSN 框架</h4>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div class="aspect-square bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center p-4">
-                                <span class="text-2xl font-black text-slate-900">T</span>
-                                <span class="text-[10px] text-slate-500 mt-1">Territory 领土</span>
-                            </div>
-                            <div class="aspect-square bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center p-4">
-                                <span class="text-2xl font-black text-slate-900">P</span>
-                                <span class="text-[10px] text-slate-500 mt-1">Power 权力</span>
-                            </div>
-                            <div class="aspect-square bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center p-4">
-                                <span class="text-2xl font-black text-slate-900">S</span>
-                                <span class="text-[10px] text-slate-500 mt-1">Scale 尺度</span>
-                            </div>
-                            <div class="aspect-square bg-white border border-slate-200 rounded-xl flex flex-col items-center justify-center p-4">
-                                <span class="text-2xl font-black text-slate-900">N</span>
-                                <span class="text-[10px] text-slate-500 mt-1">Network 网络</span>
-                            </div>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-4 text-center">四位一体分析模型：国家空间的解构工具</p>
-                    </div>
-                </div>
-            </section>
+            <h3>学术渊源：站在巨人的肩膀上</h3>
+            <p>NSS 的理论大厦建立在两大批判理论的基础之上，并成功实现了对二者的“空间化融合”：</p>
+            <ul>
+                <li><strong>列斐伏尔 (Henri Lefebvre) 的“空间的生产”：</strong> 空间不是自然界给定的透明背景，而是资本主义社会关系（包括权力与资本）生产出来的产物，并反过来维持资本主义再生产。</li>
+                <li><strong>杰索普 (Bob Jessop) 的“策略-关系国家理论 (SRST)”：</strong> 国家不是一个超然的、理性的工具机器，而是一种“社会关系的凝结”。国家通过选择特定的<strong>国家项目 (State Projects)</strong> 和 <strong>国家策略 (State Strategies)</strong> 来偏袒某些阶级。Brenner 将这一逻辑直接拉入地理维度，提出了“国家空间项目/策略”。</li>
+            </ul>
+        </div>
 
-            <section id="terminology" class="mb-24 scroll-mt-10">
-                <h3 class="text-2xl font-bold text-slate-900 mb-8 pb-2 border-b-2 border-slate-100 flex items-center">
-                    <span class="mr-3 text-sky-500">04</span> 核心术语深度释义
-                </h3>
-                <div class="grid gap-4">
-                    <div class="term-card bg-white p-6 rounded-2xl border border-slate-100 shadow-sm transition-all">
-                        <div class="flex justify-between items-start mb-4">
-                            <h4 class="font-bold text-lg text-slate-900">国家空间选择性 (Spatial Selectivity)</h4>
-                            <span class="bg-red-50 text-red-600 text-[10px] font-bold px-2 py-1 rounded">核心机制</span>
-                        </div>
-                        <p class="text-sm text-slate-600 academic-text">国家并非一视同仁，而是有策略地配置权力与政策。本质是国家在空间上的偏袒性干预，是理论运行的灵魂。</p>
-                    </div>
-                    <div class="grid md:grid-cols-3 gap-4">
-                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
-                            <h5 class="font-bold text-sm mb-2">空间策略 (Strategies)</h5>
-                            <p class="text-xs text-slate-500">顶层逻辑与导向。决定了“为什么要这么规划”。例如：参与全球竞争。</p>
-                        </div>
-                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
-                            <h5 class="font-bold text-sm mb-2">空间形式 (Forms)</h5>
-                            <p class="text-xs text-slate-500">制度硬件。包括行政区划、国土规划体系、特殊管理体制。</p>
-                        </div>
-                        <div class="p-6 bg-slate-50 rounded-2xl border border-slate-200">
-                            <h5 class="font-bold text-sm mb-2">空间项目 (Projects)</h5>
-                            <p class="text-xs text-slate-500">落地抓手。具体的工程与扶持政策，如特区建设、大型基建。</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+        <div id="tab-framework" class="tab-content">
+            <h2>二、理论核心分析框架：工具与中介机制</h2>
+            <p>NSS 认为，面对危机，国家并未“空心化”（Hollowing out），而是重组了其治理能力。这种重组的核心机制是 <strong>“国家空间选择性 (State Spatial Selectivity)”</strong>，而操作这一机制的两个具体抓手是 <strong>“国家空间项目”</strong> 和 <strong>“国家空间策略”</strong>。</p>
+            
+            <div class="info-box">
+                <strong>核心论断：</strong> 国家的空间选择性，是连接“宏观全球化/资本主义危机”与“地方不均衡发展空间结果”的核心中介。国家主动改变资源和制度的地理投射，从而改变资本流向。
+            </div>
 
-            <section id="logic" class="mb-24 scroll-mt-10 bg-slate-900 text-white p-12 rounded-[3rem] shadow-2xl relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-sky-500 opacity-10 rounded-full -mr-32 -mt-32"></div>
-                <h3 class="text-2xl font-bold mb-12 flex items-center">
-                    <span class="mr-3 text-sky-400">05</span> 理论内部逻辑链条
-                </h3>
-                <div class="flex flex-col md:flex-row justify-between items-center gap-4 relative z-10">
-                    <div class="text-center group">
-                        <div class="w-20 h-20 rounded-full border-2 border-sky-500/30 flex items-center justify-center mb-4 mx-auto group-hover:bg-sky-500 transition-all">
-                            <span class="text-xs font-bold">策略</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400">价值目标</span>
-                    </div>
-                    <div class="hidden md:block text-slate-700">➔</div>
-                    <div class="text-center group">
-                        <div class="w-20 h-20 rounded-full border-2 border-sky-500/30 flex items-center justify-center mb-4 mx-auto group-hover:bg-sky-500 transition-all">
-                            <span class="text-xs font-bold">形式</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400">制度载体</span>
-                    </div>
-                    <div class="hidden md:block text-slate-700">➔</div>
-                    <div class="text-center group">
-                        <div class="w-20 h-20 rounded-full border-2 border-sky-500/30 flex items-center justify-center mb-4 mx-auto group-hover:bg-sky-500 transition-all">
-                            <span class="text-xs font-bold">项目</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400">实践抓手</span>
-                    </div>
-                    <div class="hidden md:block text-slate-700">➔</div>
-                    <div class="text-center group">
-                        <div class="w-20 h-20 rounded-full bg-sky-500 flex items-center justify-center mb-4 mx-auto shadow-lg shadow-sky-500/20">
-                            <span class="text-xs font-bold">重组</span>
-                        </div>
-                        <span class="text-[10px] text-slate-400">动态过程</span>
-                    </div>
+            <div class="card-grid">
+                <div class="card">
+                    <h4>🛠️ 工具一：国家空间项目 (State Spatial Projects)</h4>
+                    <p><strong>定义：</strong>偏向于国家权力在不同层级、领域间的<strong>制度与组织结构重组</strong>。它解决的是“权力如何被空间化组织”的问题。</p>
+                    <p><strong>特征：</strong>它是内向的，关注国家机器内部的行政管辖权划分、上下级分权或集权。</p>
+                    <p><strong>实证表现：</strong>行政区划调整（如撤县设区）、建立直属于中央/省级的“新区管委会”、组建跨区域的协同治理机构等。</p>
                 </div>
-                <div class="mt-12 text-center text-sm text-slate-400 font-mono italic">
-                    Strategy → Form → Project → Selectivity → Rescaling → New State Space
+                <div class="card">
+                    <h4>🎯 工具二：国家空间策略 (State Spatial Strategies)</h4>
+                    <p><strong>定义：</strong>偏向于引导资本积累与发展路径的<strong>空间干预与资源投射方案</strong>。它解决的是“政策与资源如何指向特定空间对象”的问题。</p>
+                    <p><strong>特征：</strong>它是外向的，关注国家如何对特定的经济地理实体（城市、产业带）进行社会经济干预。</p>
+                    <p><strong>实证表现：</strong>在特定区域实施财政税收减免（特区政策）、向特定城市群倾斜重大基础设施投资（高铁网络）、设立自贸区等。</p>
                 </div>
-            </section>
+            </div>
 
-            <section id="cases" class="mb-24 scroll-mt-10">
-                <h3 class="text-2xl font-bold text-slate-900 mb-8 pb-2 border-b-2 border-slate-100 flex items-center">
-                    <span class="mr-3 text-sky-500">06</span> 典型应用案例
-                </h3>
-                <div class="space-y-4">
-                    <details class="group bg-white rounded-2xl border border-slate-100 overflow-hidden" open>
-                        <summary class="flex justify-between items-center p-6 cursor-pointer hover:bg-slate-50 transition-all">
-                            <span class="font-bold">案例 A：中国改革开放以来的空间重构</span>
-                            <span class="text-sky-500 group-open:rotate-180 transition-all">▼</span>
-                        </summary>
-                        <div class="p-8 pt-0 border-t border-slate-50">
-                            <div class="grid md:grid-cols-2 gap-8 mt-6">
-                                <div class="text-sm text-slate-600 space-y-4">
-                                    <p><strong class="text-slate-900">空间项目：</strong>深圳特区、浦东开发、雄安新区、自贸区。</p>
-                                    <p><strong class="text-slate-900">选择性表现：</strong>国家资源向沿海、核心城市群、特定国家战略区域的梯度倾斜。</p>
-                                </div>
-                                <div class="text-sm text-slate-600 space-y-4">
-                                    <p><strong class="text-slate-900">尺度重组：</strong>权力下放至省市层级，同时加强超国家（一带一路）层级的对话。</p>
-                                </div>
-                            </div>
-                        </div>
-                    </details>
-                    <details class="group bg-white rounded-2xl border border-slate-100 overflow-hidden">
-                        <summary class="flex justify-between items-center p-6 cursor-pointer hover:bg-slate-50 transition-all">
-                            <span class="font-bold">案例 B：欧盟一体化与跨境治理</span>
-                            <span class="text-sky-500 group-open:rotate-180 transition-all">▼</span>
-                        </summary>
-                        <div class="p-8 pt-0">
-                            <p class="text-sm text-slate-600 mt-4">典型的“权力上移”案例。通过设立欧盟共同政策（CAP、ERDF）实现跨国界的尺度重塑与资源选择性扶持。</p>
-                        </div>
-                    </details>
+            <h3>理论运转内部逻辑流</h3>
+            <div class="flow-container">
+                <div class="flow-step">
+                    <h4>1. 结构性危机</h4>
+                    <p style="font-size:0.9em;">全球化冲击与资本积累危机，导致原有空间治理模式失效。</p>
                 </div>
-            </section>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">
+                    <h4>2. 空间选择性调整</h4>
+                    <p style="font-size:0.9em;">国家启用新的空间项目（权力重组）与空间策略（资源偏向）。</p>
+                </div>
+                <div class="flow-arrow">➔</div>
+                <div class="flow-step">
+                    <h4>3. 新国家空间生成</h4>
+                    <p style="font-size:0.9em;">生成经济特区、城市群等作为新的全球竞争节点，引发不平衡发展。</p>
+                </div>
+            </div>
+        </div>
 
-            <section id="impact" class="grid md:grid-cols-2 gap-12 mb-24 scroll-mt-10">
-                <div>
-                    <h3 class="text-xl font-bold text-slate-900 mb-6">理论贡献 / Contribution</h3>
-                    <ul class="space-y-4">
-                        <li class="flex gap-3 text-sm text-slate-600">
-                            <span class="text-sky-500 font-bold">✓</span>
-                            <span>填补国家理论「空间空白」，证明国家转型即空间转型。</span>
-                        </li>
-                        <li class="flex gap-3 text-sm text-slate-600">
-                            <span class="text-sky-500 font-bold">✓</span>
-                            <span>超越了简单的“国家消亡论”，揭示国家如何主动重构空间。</span>
-                        </li>
-                        <li class="flex gap-3 text-sm text-slate-600">
-                            <span class="text-sky-500 font-bold">✓</span>
-                            <span>提供了极具操作性的分析工具（尺度、选择性、TPSN）。</span>
-                        </li>
+        <div id="tab-process" class="tab-content">
+            <h2>三、国家空间重组的三大演化机制</h2>
+            <p>在 NSS 看来，国家空间的重构不是随意的变化，而是可以分解为三类交织的地理/空间过程：</p>
+            
+            <div class="accordion">
+                <button class="accordion-header">1. 尺度重组 (Rescaling) <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p><strong>解析：</strong>指国家权力和治理活动在不同空间层级（全球、宏观区域、国家、省州、城市、社区）之间的重新分配。在福特主义时期，“民族国家（National）”尺度具有绝对的首要性；而在当代，这种首要性下降，权力发生：</p>
+                    <ul>
+                        <li><strong>尺度上移 (Upward rescaling)：</strong> 权力让渡给超国家组织（如欧盟、世贸组织）或建立跨区域联盟（如长三角一体化）。</li>
+                        <li><strong>尺度下移 (Downward rescaling)：</strong> 权力下放给地方城市、大都市区和基层，促使地方成为全球竞争的直接参与者（即“全球地方化”）。</li>
                     </ul>
                 </div>
-                <div id="limitations">
-                    <h3 class="text-xl font-bold text-slate-900 mb-6">局限与发展 / Limits</h3>
-                    <ul class="space-y-4">
-                        <li class="flex gap-3 text-sm text-slate-400">
-                            <span class="text-rose-500 font-bold">!</span>
-                            <span>西方中心主义倾向：对非西方国家的特殊治理逻辑讨论仍有待加强。</span>
-                        </li>
-                        <li class="flex gap-3 text-sm text-slate-400">
-                            <span class="text-rose-500 font-bold">!</span>
-                            <span>侧重宏观结构：对微观社会力量、生态文化维度的关注相对偏弱。</span>
-                        </li>
-                    </ul>
-                </div>
-            </section>
+            </div>
 
-            <footer class="pt-12 border-t border-slate-200">
-                <div class="bg-slate-100 p-8 rounded-3xl text-center">
-                    <h4 class="font-bold text-slate-900 mb-4">极简总结</h4>
-                    <p class="text-sm text-slate-600 academic-text max-w-2xl mx-auto">
-                        新国家空间理论通过<b>空间选择性</b>这一核心机制，揭示了国家在全球化浪潮中不再是静止的容器，而是一个通过不断进行<b>尺度重组</b>、主动制造地理不平衡以换取竞争力的策略性主体。
-                    </p>
-                    <div class="mt-8 text-[10px] text-slate-400 uppercase tracking-widest">
-                        Document Compiled for Academic Use | 2026 Reference
-                    </div>
+            <div class="accordion">
+                <button class="accordion-header">2. 再领域化 (Reterritorialization) 与再边界化 (Rebordering) <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p><strong>再领域化：</strong> 早期全球化理论认为资本的流动会导致“去领域化（世界是平的）”。NSS 反驳指出，流动的资本最终必须“降落”并附着在特定的基础设施、制度环境和劳动力市场中（如上海陆家嘴的金融基建、东莞的工厂群）。国家主动规划这些“降落点”，就是再领域化过程。</p>
+                    <p><strong>再边界化：</strong> 国家的边界并没有消失，而是其功能被重写。例如，硬性的军事边界可能弱化，但经济过滤边界、关税区边界、甚至是城市间的户籍与行政壁垒可能被重新强化或调整。</p>
                 </div>
-            </footer>
-        </main>
+            </div>
+
+            <div class="accordion">
+                <button class="accordion-header">3. 危机管理的危机 (Crisis of Crisis Management) 与 制度分层 (Layering) <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p><strong>危机管理的危机：</strong> 当国家采取“空间下移”策略鼓励城市竞争时，虽然短期内刺激了经济，但长期会导致城市间的“逐底竞争（恶性降税、重复建设）”和严重的区域不平等。这种“治理手段本身制造出的新危机”，会倒逼国家再次进行尺度重组（例如收回部分权力，推行区域协同规划）。这构成了理论的动态反馈回路。</p>
+                    <p><strong>制度分层：</strong> 空间的演化具有历史路径依赖。新的空间治理制度往往无法彻底抹除旧制度，而是像地质沉积一样“叠加（Layering）”在旧制度之上，形成复杂的“马赛克”式拼图。</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-concepts" class="tab-content">
+            <h2>四、专有名词深度对比与解析</h2>
+            <p>NSS 引入了一系列极具批判性的词汇。以下几组概念的对比是理解该理论的钥匙：</p>
+            
+            <div class="card-grid">
+                <div class="card">
+                    <h4>空间凯恩斯主义 vs. 竞争型国家</h4>
+                    <p><span class="highlight">空间凯恩斯主义 (Spatial Keynesianism)：</span> 盛行于二战后至70年代。国家视整个领土为一个需要抹平差异的系统，主要手段是“财富再分配”与“工业分散”。其核心价值观是<strong>“均等化与福利”</strong>。</p>
+                    <p><span class="highlight">竞争型国家 (Competition State)：</span> 70年代后崛起。国家不再追求各地区均等，而是实施“城市区位政策”。国家主动将优质资源集中投向最具潜力的核心都市圈，以打造参与全球竞争的“国家冠军”。其核心价值观是<strong>“效率与资本吸引”</strong>。</p>
+                </div>
+                
+                <div class="card">
+                    <h4>全球地方化 vs. 国家空心化</h4>
+                    <p><span class="highlight">国家空心化 (Hollowing Out)：</span> 这是一种被 NSS <strong>严厉批判</strong>的流行观点。该观点认为跨国公司和国际资本掏空了主权国家的能力，国家越来越无足轻重。</p>
+                    <p><span class="highlight">全球地方化 (Glocalization)：</span> NSS 提出的替代概念。国家表面上在“放权”，实则是把应对全球市场的压力“制度化地嵌入”到地方治理中。国家逼迫地方政府成为“企业化政府”去全球市场厮杀。这说明<strong>国家不仅没有空心化，反而通过在多尺度上重组自身，展现了更强的管治能力</strong>。</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-china" class="tab-content">
+            <h2>五、NSS的实证应用：欧洲与中国经验</h2>
+            <p>新国家空间理论不仅是一个宏大叙事，更是剖析特定区域政策变迁的利器。从欧洲的跨界治理到中国的新区开发，NSS展现了强大的解释力。</p>
+            
+            <div class="accordion">
+                <button class="accordion-header">🇪🇺 欧盟案例：大都市管治的尺度重组 (Brenner) <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p>Brenner 考察了1990年代以来西欧大都市的治理改革。他发现，欧洲国家纷纷放弃了以往基于全国均衡的区域政策，转而开始强力打造“大伦敦”、“法兰克福莱茵-美因区”等大都市区。这些大都市被赋予了极高的自治权和财政支持。</p>
+                    <p><strong>NSS视角解读：</strong> 这并非地方政府天然做大，而是国家面临全球资本竞争危机时，主动实施的“国家空间项目/策略”组合。国家以牺牲边缘地区为代价，将这些大都市区打造为全球化时代的<strong>“战略性新国家空间”</strong>。</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <button class="accordion-header">🇨🇳 中国案例 1：南京河西新城开发中的空间选择性 <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p>国内学者基于NSS框架对南京“河西新城”的超常规发展进行了经典剖析：</p>
+                    <ul>
+                        <li><strong>国家空间项目（权力重组）：</strong> 2002年，南京打破原有的区级行政界限，成立了直属于市政府的“河西新城开发建设指挥部”，实现了规划、土地、资金权力的<strong>“尺度上移”</strong>。</li>
+                        <li><strong>国家空间策略（资源偏向）：</strong> 市政府通过规定“河西土地出让金全额留存河西使用”，并将“十运会”的巨额省级公共项目资源定点投射到河西。</li>
+                    </ul>
+                    <p><strong>结论：</strong> 河西的房地产化和地租飙升，不是纯粹的市场自发力量（资本选择性），而是政府通过制度和资源配置进行强烈<strong>国家空间选择性</strong>干预的直接结果。</p>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <button class="accordion-header">🇨🇳 中国案例 2：从经济特区到城市群的制度化上升 <span class="icon">+</span></button>
+                <div class="accordion-content">
+                    <p>中国改革开放以来的空间演进，完美契合了NSS关于“危机与尺度重组”的反馈逻辑：</p>
+                    <p><strong>阶段一（尺度下移与再领域化）：</strong> 设立深圳等经济特区、高新区。国家下放权力，实施特殊税收（空间策略），将沿海打造为吸引外资的再领域化空间，但随后引发了严重的城市间同质化竞争（如长三角各市抢夺外资的“逐底竞争”）。</p>
+                    <p><strong>阶段二（尺度上移与区域协同）：</strong> 面对“危机管理的危机”（地方过度企业化带来的内耗），国家近年来出台《长三角一体化发展规划纲要》、《粤港澳大湾区发展规划纲要》。通过将“城市群”制度化、国家化，试图在更高的尺度上重新整合资源，压制无序竞争，这是新一轮的国家空间重构。</p>
+                </div>
+            </div>
+            
+            <div class="info-box">
+                <strong>💡 理论局限与展望：</strong> 尽管 NSS 解释力强大，但学术界也批评其有“尺度万能论”的倾向，且过度关注自上而下的国家结构（Top-down），对底层社会力量、流浪者、中小企业等微观行动者（Bottom-up）的反向塑造能力刻画相对不足。这为未来的跨学科研究留下了空间。
+            </div>
+        </div>
     </div>
 
     <script>
-        // Simple Sidebar Scrollspy
-        const links = document.querySelectorAll('.sidebar-link');
-        const sections = document.querySelectorAll('section');
+        // Tab Switching Logic
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).style.display = "block";
+            // A slight delay to ensure display:block is rendered before opacity animation triggers
+            setTimeout(() => {
+                document.getElementById(tabName).classList.add("active");
+            }, 10);
+            
+            evt.currentTarget.classList.add("active");
+        }
 
-        window.addEventListener('scroll', () => {
-            let current = "";
-            sections.forEach((section) => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 150) {
-                    current = section.getAttribute("id");
+        // Accordion Logic
+        var acc = document.getElementsByClassName("accordion-header");
+        for (var i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var icon = this.querySelector('.icon');
+                if(this.classList.contains("active")) {
+                    icon.textContent = "-";
+                } else {
+                    icon.textContent = "+";
                 }
+                
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    // Generous calculation to handle paddings and dynamic text wrapping
+                    content.style.maxHeight = content.scrollHeight + 50 + "px";
+                } 
             });
-
-            links.forEach((link) => {
-                link.classList.remove("active");
-                if (link.getAttribute("href").includes(current)) {
-                    link.classList.add("active");
-                }
-            });
-        });
-
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('menuBtn');
-        const sidebar = document.getElementById('sidebar');
-        menuBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('hidden');
-            sidebar.classList.toggle('fixed');
-            sidebar.classList.toggle('z-40');
-            sidebar.classList.toggle('w-full');
-        });
+        }
     </script>
 </body>
 </html>
