@@ -1,0 +1,1618 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>新国家空间（New State Spaces）交互式学习手册</title>
+
+  <!-- Mermaid：用于“内部层次逻辑图”。想做完全离线版：下载 mermaid.min.js 放同目录，然后把下面 CDN 改成本地路径 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b0f17;
+      --panel:#0f1625;
+      --panel2:#111b2d;
+      --text:#e8eefc;
+      --muted:#a8b3cf;
+      --line:rgba(255,255,255,.08);
+      --brand:#7aa7ff;
+      --brand2:#55d6be;
+      --warn:#ffcc66;
+      --bad:#ff7b72;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius: 14px;
+      --radius2: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Apple Color Emoji","Segoe UI Emoji";
+    }
+    [data-theme="light"]{
+      --bg:#f6f8ff;
+      --panel:#ffffff;
+      --panel2:#f2f5ff;
+      --text:#0d1220;
+      --muted:#4b5a78;
+      --line:rgba(5,10,25,.10);
+      --brand:#2d62ff;
+      --brand2:#0bbf9a;
+      --shadow: 0 10px 30px rgba(10,20,40,.12);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 10% -10%, rgba(122,167,255,.18), transparent 60%),
+                  radial-gradient(900px 600px at 95% 5%, rgba(85,214,190,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+    }
+    a{color:var(--brand); text-decoration:none}
+    a:hover{opacity:.9; text-decoration:underline}
+    .app{
+      display:grid;
+      grid-template-columns: 290px 1fr;
+      min-height:100vh;
+    }
+    .sidebar{
+      position:sticky;
+      top:0;
+      height:100vh;
+      padding:18px 14px 14px 14px;
+      border-right:1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15,22,37,.88), rgba(15,22,37,.70));
+      backdrop-filter: blur(10px);
+      overflow:auto;
+    }
+    [data-theme="light"] .sidebar{
+      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.70));
+    }
+    .brand{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      padding:10px 10px 14px;
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(122,167,255,.12), rgba(85,214,190,.06));
+    }
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      background: conic-gradient(from 225deg, var(--brand), var(--brand2), var(--brand));
+      box-shadow: 0 10px 25px rgba(0,0,0,.25);
+      flex:0 0 auto;
+    }
+    .brand h1{
+      margin:0;
+      font-size:15px;
+      letter-spacing:.2px;
+      line-height:1.25;
+    }
+    .brand p{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .controls{
+      margin-top:12px;
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      padding: 0 6px;
+    }
+    .btn{
+      border:1px solid var(--line);
+      background: var(--panel);
+      color:var(--text);
+      padding:8px 10px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-size:12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.12);
+    }
+    .btn:hover{transform: translateY(-1px)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{border-color: rgba(122,167,255,.35); background: linear-gradient(180deg, rgba(122,167,255,.16), rgba(122,167,255,.05))}
+    .btn.ghost{background: transparent}
+    .search{
+      margin:12px 6px 10px;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .search label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .search input{
+      width:100%;
+      padding:10px 10px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      outline:none;
+    }
+    .searchResults{
+      margin-top:10px;
+      display:none;
+      border-top:1px dashed var(--line);
+      padding-top:10px;
+      max-height: 260px;
+      overflow:auto;
+    }
+    .srItem{
+      padding:8px 8px;
+      border:1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255,255,255,.03);
+      margin-bottom:8px;
+      cursor:pointer;
+    }
+    [data-theme="light"] .srItem{background: rgba(10,20,40,.03)}
+    .srItem:hover{border-color: rgba(122,167,255,.45)}
+    .srType{
+      font-size:11px;
+      color:var(--muted);
+    }
+    .srTitle{
+      margin-top:3px;
+      font-size:13px;
+      line-height:1.25;
+    }
+    .nav{
+      margin:10px 6px 0;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+    .nav h2{
+      margin:0 0 10px;
+      font-size:12px;
+      color:var(--muted);
+      letter-spacing:.2px;
+      text-transform:uppercase;
+    }
+    .nav a{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:9px 10px;
+      border-radius: 12px;
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid transparent;
+      font-size:13px;
+      line-height:1.2;
+      margin-bottom:6px;
+    }
+    .nav a:hover{background: rgba(122,167,255,.10); border-color: rgba(122,167,255,.18)}
+    .nav a.active{background: rgba(85,214,190,.12); border-color: rgba(85,214,190,.28)}
+    .nav .num{
+      width:26px; height:26px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:12px;
+      flex: 0 0 auto;
+    }
+    .nav .label{flex:1}
+    .footerNote{
+      margin:12px 6px 0;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+      background: rgba(255,255,255,.02);
+    }
+
+    .main{
+      padding: 20px 22px 40px;
+      max-width: 1200px;
+    }
+    .topbar{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom: 14px;
+    }
+    .crumb{
+      font-size:13px;
+      color:var(--muted);
+    }
+    .pageTitle{
+      margin: 6px 0 0;
+      font-size: 26px;
+      letter-spacing: .2px;
+      line-height:1.15;
+    }
+    .subTitle{
+      margin: 8px 0 0;
+      color:var(--muted);
+      line-height:1.6;
+      max-width: 72ch;
+      font-size: 14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+    @media (max-width: 980px){
+      .app{grid-template-columns: 1fr}
+      .sidebar{position:relative; height:auto}
+      .main{padding: 16px}
+      .grid{grid-template-columns: 1fr}
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    [data-theme="light"] .card{
+      background: linear-gradient(180deg, rgba(10,20,40,.02), rgba(10,20,40,.01));
+    }
+    .cardHeader{
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .cardHeader h3{
+      margin:0;
+      font-size: 14px;
+      letter-spacing:.2px;
+    }
+    .cardHeader p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .cardBody{padding: 14px 16px}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{
+      font-size: 12px;
+      color: var(--muted);
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.02);
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .section{
+      display:none;
+      animation: fade .18s ease-out;
+    }
+    .section.active{display:block}
+    @keyframes fade{from{opacity:.65; transform: translateY(2px)} to{opacity:1; transform: translateY(0)}}
+
+    details{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      margin: 10px 0;
+      overflow:hidden;
+    }
+    details[open]{border-color: rgba(122,167,255,.22)}
+    summary{
+      cursor:pointer;
+      list-style:none;
+      padding: 12px 14px;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      user-select:none;
+    }
+    summary::-webkit-details-marker{display:none}
+    summary .k{
+      width:24px; height:24px;
+      border-radius: 10px;
+      display:grid;
+      place-items:center;
+      background: rgba(122,167,255,.12);
+      color: var(--brand);
+      font-weight: 700;
+      flex: 0 0 auto;
+      margin-top: 1px;
+    }
+    summary .t{
+      font-weight: 650;
+      line-height: 1.2;
+      font-size: 14px;
+    }
+    summary .d{
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    details .content{
+      border-top:1px dashed var(--line);
+      padding: 12px 14px 14px;
+      color: var(--text);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+    .muted{color:var(--muted)}
+    .hr{
+      height:1px;
+      background: var(--line);
+      margin: 14px 0;
+    }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    th, td{
+      padding: 10px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    th{
+      text-align:left;
+      color: var(--muted);
+      font-weight: 650;
+      letter-spacing: .2px;
+      background: rgba(255,255,255,.03);
+    }
+    [data-theme="light"] th{background: rgba(10,20,40,.03)}
+    tr:last-child td{border-bottom: none}
+    .tag{
+      display:inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border:1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      margin-right: 6px;
+      white-space: nowrap;
+    }
+    .tag.brand{color: var(--brand); border-color: rgba(122,167,255,.25); background: rgba(122,167,255,.08)}
+    .tag.green{color: var(--brand2); border-color: rgba(85,214,190,.25); background: rgba(85,214,190,.08)}
+    .tag.warn{color: var(--warn); border-color: rgba(255,204,102,.25); background: rgba(255,204,102,.08)}
+    .tag.bad{color: var(--bad); border-color: rgba(255,123,114,.25); background: rgba(255,123,114,.08)}
+    .kbd{
+      font-family: var(--mono);
+      padding: 2px 6px;
+      border:1px solid var(--line);
+      border-bottom-width: 2px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+
+    .mermaidWrap{
+      border:1px solid var(--line);
+      border-radius: var(--radius2);
+      background: var(--panel);
+      padding: 10px;
+      overflow:auto;
+    }
+
+    .flash{
+      outline: 2px solid rgba(122,167,255,.55);
+      box-shadow: 0 0 0 6px rgba(122,167,255,.14);
+      border-radius: 12px;
+      transition: box-shadow .7s ease;
+    }
+  </style>
+</head>
+
+<body>
+<div class="app" id="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>新国家空间（NSS）交互式学习手册</h1>
+        <p>面向：政治地理 / 城市研究 / 区域治理 / 历史空间治理研究<br/>
+           用法：侧栏切换模块；<span class="kbd">Ctrl/⌘ + F</span> 可全文检索。</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="btnPrint" title="打印/导出PDF（浏览器自带）">打印/导出</button>
+      <button class="btn" id="btnTheme" title="切换深色/浅色">切换主题</button>
+      <button class="btn ghost" id="btnExpandAll" title="展开当前模块所有折叠项">展开本页</button>
+      <button class="btn ghost" id="btnCollapseAll" title="收起当前模块所有折叠项">收起本页</button>
+    </div>
+
+    <div class="search">
+      <label for="globalSearch">全局搜索（术语 / 文献 / 案例 / 命题）</label>
+      <input id="globalSearch" placeholder="例如：尺度重组 / 空心化 / 河西新城 / 空间选择性…" />
+      <div class="searchResults" id="searchResults"></div>
+    </div>
+
+    <nav class="nav" aria-label="章节导航">
+      <h2>模块导航</h2>
+      <a href="#overview" data-target="overview" class="active"><span class="num">00</span><span class="label">概览与路线图</span></a>
+      <a href="#authors" data-target="authors"><span class="num">01</span><span class="label">提出者与核心文献</span></a>
+      <a href="#background" data-target="background"><span class="num">02</span><span class="label">理论提出背景</span></a>
+      <a href="#position" data-target="position"><span class="num">03</span><span class="label">理论核心定位</span></a>
+      <a href="#contents" data-target="contents"><span class="num">04</span><span class="label">理论主要内容</span></a>
+      <a href="#glossary" data-target="glossary"><span class="num">05</span><span class="label">核心专有名词释义</span></a>
+      <a href="#logic" data-target="logic"><span class="num">06</span><span class="label">内部层次逻辑</span></a>
+      <a href="#cases" data-target="cases"><span class="num">07</span><span class="label">典型应用案例</span></a>
+      <a href="#impact" data-target="impact"><span class="num">08</span><span class="label">贡献与影响</span></a>
+      <a href="#limits" data-target="limits"><span class="num">09</span><span class="label">局限与后续发展</span></a>
+      <a href="#appendix" data-target="appendix"><span class="num">A</span><span class="label">附录：研究设计模板</span></a>
+    </nav>
+
+    <div class="footerNote">
+      <b>提示</b>：本页为单文件网页（可直接打开）。若你要在线分享，可放到 GitHub Pages / 任意静态托管。<br/>
+      <span class="muted">Mermaid 图需联网加载；离线版可把 mermaid.min.js 下载到同目录后改成本地引用。</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <div class="crumb" id="crumb">模块 00 / 概览与路线图</div>
+        <h2 class="pageTitle" id="pageTitle">概览与路线图</h2>
+        <p class="subTitle" id="subTitle">
+          NSS 的问题意识：国家空间不是预设不变的“领土容器”，而是资本积累、国家管制重构与社会政治斗争交织下的社会—空间过程；
+          全球化不是“去地域化”，而是再地域化与多尺度重组的展开；国家通过差异化空间选择性重组其治理能力与发展策略。
+        </p>
+      </div>
+      <div class="chips">
+        <span class="chip">点击侧栏切换</span>
+        <span class="chip">可折叠展开</span>
+        <span class="chip">全局搜索</span>
+        <span class="chip">可打印导出</span>
+      </div>
+    </div>
+
+    <!-- 00 Overview -->
+    <section class="section active" id="section-overview">
+      <div class="grid">
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>你将获得什么</h3>
+              <p>把“新国家空间”从一套大理论，拆成可读、可用、可检验的知识结构。</p>
+            </div>
+            <span class="tag brand">学习地图</span>
+          </div>
+          <div class="cardBody">
+            <details open>
+              <summary><span class="k">1</span><div><div class="t">先抓住三个“硬核句式”</div><div class="d">用它们判断你是不是在用 NSS，而不是在泛谈“国家+空间”。</div></div></summary>
+              <div class="content">
+                <ul>
+                  <li><b>国家空间是过程</b>：它在危机与治理变迁中被持续生产、重组与争夺（不是固定容器）。</li>
+                  <li><b>关键机制是“空间选择性”</b>：国家以差异化方式在地区/尺度上配置权力、政策与资源，从而塑造不均衡。</li>
+                  <li><b>尺度是政治对象</b>：国家不是“只有国家尺度”，而是在多尺度上重组权力与治理能力。</li>
+                </ul>
+              </div>
+            </details>
+
+            <details>
+              <summary><span class="k">2</span><div><div class="t">一条“因果链”总览</div><div class="d">结构动因 → 国家空间过程 → 空间选择性 → 新国家空间 → 空间效应 → 反馈</div></div></summary>
+              <div class="content">
+                <p class="muted">你可以在模块 06 查看可视化逻辑图（Mermaid）。这里先给学习用的最小链条：</p>
+                <ol>
+                  <li>资本主义危机/积累方式转变 + 国家管制模式转型 + 利益联盟重组</li>
+                  <li>触发国家空间过程：再领域化 / 再边界化 / 尺度重组</li>
+                  <li>形成或调整国家空间选择性</li>
+                  <li>通过国家空间项目（权力组织重构）与国家空间策略（资源/政策导向）生成“新国家空间”（城市—区域、新区、跨界平台…）</li>
+                  <li>产生空间效应（不均衡、竞争—合作格局、治理张力…）并反过来推动下一轮重构（“危机管理的危机”）</li>
+                </ol>
+              </div>
+            </details>
+
+            <details>
+              <summary><span class="k">3</span><div><div class="t">建议阅读路径</div><div class="d">从“正典”到“工具箱”再到“案例库”。</div></div></summary>
+              <div class="content">
+                <ol>
+                  <li><b>正典：</b>Brenner 2004《New State Spaces》→ 形成整体框架与术语体系</li>
+                  <li><b>工具箱：</b>“空间选择性 / 项目—策略”三联工具 + “尺度政治/尺度重组”</li>
+                  <li><b>案例库：</b>欧盟城市治理、德国欧区域、南京河西新城、城市群制度化（模块 07）</li>
+                  <li><b>方法化：</b>把“选择性”落到可测的配置与结果差异（模块 09 + 附录）</li>
+                </ol>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>快速跳转</h3>
+              <p>按你的需求进入：写综述 / 做研究设计 / 做历史解释 / 讲课。</p>
+            </div>
+            <span class="tag green">快捷入口</span>
+          </div>
+          <div class="cardBody">
+            <details open>
+              <summary><span class="k">✦</span><div><div class="t">我要写综述</div><div class="d">文献 + 背景 + 核心定位 + 贡献/局限</div></div></summary>
+              <div class="content">
+                <ul>
+                  <li>先看模块 01（核心文献）</li>
+                  <li>再看模块 02/03（背景与定位）</li>
+                  <li>最后用模块 08/09 写“贡献—批评—后续发展”</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span class="k">✦</span><div><div class="t">我要做研究设计</div><div class="d">把概念变成变量、证据与对照组。</div></div></summary>
+              <div class="content">
+                <ul>
+                  <li>模块 06：逻辑链（箭头如何被证据化）</li>
+                  <li>模块 09：可检验假设 + 方法建议</li>
+                  <li>附录：指标/材料/操作化清单</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span class="k">✦</span><div><div class="t">我要研究历史时期空间治理</div><div class="d">把 NSS “降阶”成可用于历史解释的通用命题。</div></div></summary>
+              <div class="content">
+                <p>建议用法：</p>
+                <ul>
+                  <li>保留：空间作为权力组织与资源投射的过程；选择性；多尺度组织</li>
+                  <li>替换：把“竞争型国家/新自由主义”改写为更契合该时期的主导目标（财政汲取、军事控制、移民屯垦、交通与关卡、灾荒治理等）</li>
+                  <li>把“尺度重组”落到可观测制度：设治/撤并、军政区划、赋役体制、交通网络与节点治理、边界叙事与管控方式变化</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 Authors & Core Literature -->
+    <section class="section" id="section-authors">
+      <div class="grid">
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>提出者与核心文献（按阅读优先级）</h3>
+              <p>中文语境常说“布伦纳提出的新国家空间理论”；更准确说法是：以 Brenner 的系统化建构为核心，同时吸收并空间化延展 Jessop 的 SRST 与 Jones 的空间选择性传统。</p>
+            </div>
+            <span class="tag brand">核心文献</span>
+          </div>
+          <div class="cardBody">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px">
+              <span class="tag green">Neil Brenner：系统化建构者</span>
+              <span class="tag">Bob Jessop：SRST（项目/策略/选择性）母体</span>
+              <span class="tag">Martin Jones：空间选择性早期论述</span>
+              <span class="tag warn">提示：中文“国家/政府”译法易混</span>
+            </div>
+
+            <div style="margin: 8px 0 12px">
+              <input id="litSearch" placeholder="检索文献：关键词 / 年份 / 作者…" style="width:100%; padding:10px 10px; border-radius:12px; border:1px solid var(--line); background: var(--panel2); color: var(--text);" />
+              <div class="muted" style="font-size:12px; margin-top:6px">支持模糊检索；点击行可展开“主要论点/用法”。</div>
+            </div>
+
+            <div style="overflow:auto">
+              <table id="litTable" aria-label="核心文献表">
+                <thead>
+                  <tr>
+                    <th style="width:84px">优先级</th>
+                    <th>文献</th>
+                    <th style="width:90px">年份</th>
+                    <th style="width:140px">作者</th>
+                    <th>要点（高度概括）</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+
+            <details>
+              <summary><span class="k">?</span><div><div class="t">怎么读最省力：三步读法</div><div class="d">先读“问题起点”，再读“概念工具”，最后读“案例链”。</div></div></summary>
+              <div class="content">
+                <ol>
+                  <li><b>问题起点：</b>全球化并非国家消失，而是再地域化与多尺度重组；城市治理变化是尺度政治表达。</li>
+                  <li><b>概念工具：</b>国家空间过程（再领域化/再边界化/尺度重组）+ 国家空间选择性 + 项目/策略三联。</li>
+                  <li><b>案例链：</b>用 1–2 个案例把“概念—证据—结论”的链条跑通，再扩展比较。</li>
+                </ol>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>中文延伸阅读（与空间治理/行政区划对接）</h3>
+              <p>如果你的研究关心“国家—地方关系、行政区划与空间治理工具”，可用作语境材料与对照。</p>
+            </div>
+            <span class="tag">扩展</span>
+          </div>
+          <div class="cardBody">
+            <details open>
+              <summary><span class="k">书</span><div><div class="t">《国家空间治理与行政区划 1：从国家到地方》（2022）</div><div class="d">东南大学出版社；可用于把“尺度/层级/设治”问题放进中国语境的讨论。</div></div></summary>
+              <div class="content">
+                <p class="muted">建议用法：把书中的行政区划、城市群—城市—社区等层级讨论，与 NSS 的“尺度重组/选择性/项目—策略”工具进行概念对位。</p>
+                <ul>
+                  <li>当你讨论“撤县设区/设治/新区管委会”等制度变化：优先用“尺度重组 + 国家空间项目”。</li>
+                  <li>当你讨论“某地获得国家级平台与资源倾斜”：优先用“国家空间策略 + 空间选择性”。</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Background -->
+    <section class="section" id="section-background">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>理论提出背景：历史—政治经济 + 学术语境</h3>
+            <p>理解 NSS 的关键，不是背术语，而是理解它回答了哪类“时代问题”。</p>
+          </div>
+          <span class="tag brand">背景</span>
+        </div>
+        <div class="cardBody">
+          <details open>
+            <summary><span class="k">1</span><div><div class="t">历史—政治经济背景：1970年代以来的危机与治理变迁</div><div class="d">福特—凯恩斯主义危机、新自由主义扩散、全球生产网络与金融化发展。</div></div></summary>
+            <div class="content">
+              <p>
+                NSS 的问题起点：当以全国均衡与再分配为主轴的空间治理逻辑遭遇挑战，
+                国家开始通过尺度下移/上移/外移等路径重组其干预能力与空间组织，并在关键城市—区域上形成更强的政策与资源聚焦。
+              </p>
+              <p class="muted">一句话：国家并非“退场”，而是在改变“以什么空间形态来发挥能力”。</p>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">2</span><div><div class="t">学术语境：空间转向 + 国家理论 + 尺度政治</div><div class="d">Lefebvre 的空间生产；Jessop 的 SRST；尺度政治/尺度重组研究。</div></div></summary>
+            <div class="content">
+              <ul>
+                <li><b>空间转向：</b>空间不是背景，而是权力与社会关系的生产物；为“国家空间性”提供本体论基础。</li>
+                <li><b>SRST：</b>国家通过项目/策略/选择性实现职能；NSS 将其进一步空间化。</li>
+                <li><b>尺度政治：</b>尺度是被争夺、被建构的政治对象，“国家在何种尺度上组织治理”成为核心问题。</li>
+              </ul>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">3</span><div><div class="t">反对两种“流行叙事”</div><div class="d">反对“领土陷阱”与“空心化叙事”的简单化。</div></div></summary>
+            <div class="content">
+              <ul>
+                <li><b>反对领土陷阱：</b>国家≠固定领土容器；主权/权力并不只在边界内以同一方式运作。</li>
+                <li><b>反对空心化：</b>全球化不等于国家能力衰退；更应关注国家权力如何在多尺度上被重组。</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Position -->
+    <section class="section" id="section-position">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>理论核心定位：它不是规划工具箱，而是“国家—空间”解释框架</h3>
+            <p>位于政治地理学 / 城市研究 / 国家理论 / 批判政治经济学的交叉地带。</p>
+          </div>
+          <span class="tag brand">定位</span>
+        </div>
+        <div class="cardBody">
+          <details open>
+            <summary><span class="k">1</span><div><div class="t">学科边界：NSS 在研究谱系中的位置</div><div class="d">它既不同于传统地缘政治，也不同于“技术性规划方法”。</div></div></summary>
+            <div class="content">
+              <p>
+                NSS 不是传统国际关系意义的“国家中心地缘政治学”，也不是城市规划的政策工具箱，而是一套批判政治经济学取向的
+                <b>国家—空间解释框架</b>：用以理解国家权力、政策与资本循环如何在多尺度/多领域空间中被组织，并产生不均衡结果。
+              </p>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">2</span><div><div class="t">核心定位一句话</div><div class="d">国家在危机与竞争压力下，通过空间选择性与尺度重组，生产新的战略性空间。</div></div></summary>
+            <div class="content">
+              <ol>
+                <li>国家空间不是容器，而是过程（社会建构、动态、多维）。</li>
+                <li>全球化是再地域化/再尺度化；城市治理变化是国家空间重构的前沿场域。</li>
+                <li>解释机制是空间选择性：通过项目（权力组织）与策略（资源导向）生产新国家空间并塑造不均衡。</li>
+              </ol>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">3</span><div><div class="t">与“旧国家空间观”怎么区分</div><div class="d">旧：国家空间=既定容器；新：空间=权力重组的结果与媒介。</div></div></summary>
+            <div class="content">
+              <p>
+                “旧”更多是一种研究默认：<b>国家=领土容器，尺度默认是国家</b>；
+                NSS 则强调城市—区域等次国家尺度在国家重构中的战略性地位，并把国家空间当作被生产与被重组的过程。
+              </p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Contents -->
+    <section class="section" id="section-contents">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>理论主要内容：命题—机制链</h3>
+            <p>把 NSS 拆成 9 个可操作命题，避免“只会引用名词”但抓不住机制。</p>
+          </div>
+          <span class="tag brand">命题链</span>
+        </div>
+        <div class="cardBody" id="propWrap"></div>
+      </div>
+    </section>
+
+    <!-- 05 Glossary -->
+    <section class="section" id="section-glossary">
+      <div class="grid">
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>核心专有名词释义（可检索）</h3>
+              <p>每个词条包含：严格含义 → 常见误读 → 案例化提示 → 与相邻概念的边界。</p>
+            </div>
+            <span class="tag brand">术语词典</span>
+          </div>
+          <div class="cardBody">
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:10px">
+              <input id="termSearch" placeholder="检索术语：中文/英文/关键词…" style="flex:1; min-width:240px; padding:10px 10px; border-radius:12px; border:1px solid var(--line); background: var(--panel2); color: var(--text);" />
+              <select id="termFilter" style="padding:10px 10px; border-radius:12px; border:1px solid var(--line); background: var(--panel2); color: var(--text);">
+                <option value="all">全部类别</option>
+                <option value="core">核心概念</option>
+                <option value="process">空间过程</option>
+                <option value="tools">分析工具</option>
+                <option value="debates">关键争论</option>
+              </select>
+            </div>
+            <div id="termWrap"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <h3>概念对位速查</h3>
+              <p>用一句话区分最容易混的几组词。</p>
+            </div>
+            <span class="tag">速查</span>
+          </div>
+          <div class="cardBody">
+            <details open>
+              <summary><span class="k">≠</span><div><div class="t">尺度重组 vs 行政区划调整</div><div class="d">区划是结果；重组强调权力/功能如何被重新组织。</div></div></summary>
+              <div class="content">
+                <p>行政区划调整可以是尺度重组的表现，但尺度重组更关注：</p>
+                <ul>
+                  <li>哪些权力上移/下放？</li>
+                  <li>哪些政策能力被集中或平台化？</li>
+                  <li>哪些任务被跨辖区重新组合？</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span class="k">≠</span><div><div class="t">国家空间选择性 vs 资本空间选择性</div><div class="d">资本追逐利润/地租差；国家可用制度与资源投射改变资本流向。</div></div></summary>
+              <div class="content">
+                <p>你可以用“是否存在制度性例外与公共资源集中”来区分：</p>
+                <ul>
+                  <li>如果只有市场投资偏好：更像资本选择性。</li>
+                  <li>如果伴随审批权上移、财政返还、重大项目投射：国家选择性更强。</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary><span class="k">≠</span><div><div class="t">项目（project）vs 策略（strategy）</div><div class="d">项目偏“权力组织的空间化”；策略偏“资源/政策的空间导向”。</div></div></summary>
+              <div class="content">
+                <p>写作口诀：</p>
+                <ul>
+                  <li><b>项目：</b>谁来管？怎么管？权责怎么配？</li>
+                  <li><b>策略：</b>钱投哪？政策倾向哪里？发展叙事如何指向特定空间？</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 Logic -->
+    <section class="section" id="section-logic">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>理论内部层次逻辑：从“结构动因”到“反馈回路”</h3>
+            <p>建议把它当作一张“研究设计导图”：每条箭头都要能对应到证据类型与可观察指标。</p>
+          </div>
+          <span class="tag brand">逻辑图</span>
+        </div>
+        <div class="cardBody">
+          <div class="mermaidWrap">
+            <pre class="mermaid" id="mermaidChart">
+flowchart TB
+  A[资本主义危机与积累方式转变] --> B[国家管制/治理模式转型]
+  A --> C[社会政治斗争与利益联盟重组]
+  B --> D[国家空间过程: 再领域化/再边界化/尺度重组]
+  C --> D
+
+  D --> E[国家空间选择性形成/调整]
+  E --> F[国家空间项目: 权力组织的空间化重构]
+  E --> G[国家空间策略: 政策与资源的空间导向]
+
+  F --> H[新国家空间生成: 城市-区域/新区/跨界平台等]
+  G --> H
+
+  H --> I[空间效应: 不均衡发展/竞争-合作格局/治理张力]
+  I --> J[危机管理的危机与制度修复需求]
+  J --> D
+            </pre>
+          </div>
+
+          <div class="hr"></div>
+
+          <details open>
+            <summary><span class="k">1</span><div><div class="t">读图方法：如何把“箭头”变成论文结构</div><div class="d">结构动因—机制—结果—反馈：每段都要有材料与指标。</div></div></summary>
+            <div class="content">
+              <ol>
+                <li><b>结构动因（A/B/C）：</b>宏观史实与制度变迁材料（政策转向、财政制度、产业结构、危机事件）。</li>
+                <li><b>空间过程（D）：</b>尺度/领域/边界变化的制度证据（机构设置、权限调整、跨域平台、边界治理方式变化）。</li>
+                <li><b>选择性（E）：</b>差别化配置证据（资源集中度、政策例外性、公共项目投射、考核与动员强度）。</li>
+                <li><b>项目/策略（F/G）：</b>权力组织与资源导向分开写，避免所有东西都叫“政策”。</li>
+                <li><b>结果与反馈（H/I/J）：</b>不均衡、竞争—合作张力、制度修复与再改革作为闭环。</li>
+              </ol>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">2</span><div><div class="t">最常见的“用坏”方式</div><div class="d">把“尺度重组”当万能解释；把选择性当口号。</div></div></summary>
+            <div class="content">
+              <ul>
+                <li><b>危险1：</b>只要出现跨层级协同就说“尺度重组”，但不说明权力/资源配置如何变化。</li>
+                <li><b>危险2：</b>说“国家有选择性”但不展示选择性强度（对照组/指标/资源流）。</li>
+                <li><b>解决：</b>至少提供 ①制度变更清单 ②资源投射差异 ③对照空间对象。</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Cases -->
+    <section class="section" id="section-cases">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>典型应用案例库（可按概念工具理解）</h3>
+            <p>每个案例：背景 → 方法 → 发现 → NSS用法 → 局限；并给出“可迁移的分析步骤”。</p>
+          </div>
+          <span class="tag brand">案例</span>
+        </div>
+        <div class="cardBody">
+          <div class="muted" style="margin-bottom:10px">提示：可用上方全局搜索输入“河西/欧区域/城市群/再地域化”等跳转到对应卡片。</div>
+          <div id="caseWrap"></div>
+
+          <div class="hr"></div>
+
+          <details>
+            <summary><span class="k">+</span><div><div class="t">如何把这些案例迁移到你的研究对象</div><div class="d">把“案例叙事”转成“变量—证据—对照”。</div></div></summary>
+            <div class="content">
+              <ol>
+                <li>先确定对象属于哪类“新国家空间”：新区/开发区、城市群平台、跨界合作区、战略走廊…</li>
+                <li>列出尺度变化：权力上移、下放、外移（到平台/协作网络）？</li>
+                <li>把选择性拆成两类证据：制度例外（项目）与资源投射（策略）。</li>
+                <li>设置对照：未被选定地区/同类新区/同级城市。</li>
+                <li>把结果写成“效应 + 张力 + 修复”：不均衡、竞争外部性、下一轮治理调整。</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 Impact -->
+    <section class="section" id="section-impact">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>理论贡献与影响</h3>
+            <p>学术贡献（理论与方法）+ 政策/实践意义（解释空间特权与治理张力）。</p>
+          </div>
+          <span class="tag brand">影响</span>
+        </div>
+        <div class="cardBody" id="impactWrap"></div>
+      </div>
+    </section>
+
+    <!-- 09 Limits -->
+    <section class="section" id="section-limits">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>局限与后续发展：批评、未解问题、可检验化路径</h3>
+            <p>把批评转化为研究机会：机制识别更严格、行动者与微观过程更细、跨语境可比性更强。</p>
+          </div>
+          <span class="tag warn">争议</span>
+        </div>
+        <div class="cardBody" id="limitWrap"></div>
+      </div>
+    </section>
+
+    <!-- Appendix -->
+    <section class="section" id="section-appendix">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <h3>附录：把 NSS 变成可用研究设计（模板）</h3>
+            <p>研究问题 → 机制假设 → 指标 → 数据 → 对照 → 因果叙事。</p>
+          </div>
+          <span class="tag green">模板</span>
+        </div>
+        <div class="cardBody">
+          <details open>
+            <summary><span class="k">Q</span><div><div class="t">一、研究问题（示例句式）</div><div class="d">围绕“选择性”与“尺度/领域变化”提出可证伪问题。</div></div></summary>
+            <div class="content">
+              <ul>
+                <li>为何某空间对象（新区/城市群/跨界平台）会被国家优先化为战略性“新国家空间”？</li>
+                <li>这种优先性通过哪些权力组织重构（项目）与资源投射（策略）实现？</li>
+                <li>它在区域不均衡、竞争—合作格局与治理张力上造成了什么效应？是否引发制度修复？</li>
+              </ul>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">H</span><div><div class="t">二、机制假设（可检验）</div><div class="d">把“选择性”落到可测的制度与资源差异。</div></div></summary>
+            <div class="content">
+              <ol>
+                <li><b>制度例外假设：</b>被设为战略性新国家空间时，会观察到跨尺度权力上移与例外性授权（机构设置、审批权、财政规则）。</li>
+                <li><b>资源投射假设：</b>选择性不仅在文本中，更在资源集中度上体现（财政返还、重大公共项目、动员资源）。</li>
+                <li><b>效应假设：</b>选择性强化差异并可能外溢为竞争外部性，促使后续协调治理与制度修复。</li>
+              </ol>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">Σ</span><div><div class="t">三、指标与材料清单（建议）</div><div class="d">让每个箭头都有“证据类型”。</div></div></summary>
+            <div class="content">
+              <table>
+                <thead>
+                  <tr>
+                    <th>环节</th>
+                    <th>可观察指标（示例）</th>
+                    <th>材料来源（示例）</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>尺度重组</td>
+                    <td>权限上移/下放、跨域平台设立、协同机构</td>
+                    <td>组织机构文件、法规/规章、规划文本、领导小组文件</td>
+                  </tr>
+                  <tr>
+                    <td>国家空间项目</td>
+                    <td>管委会/指挥部设置、审批链条变化、部门授权</td>
+                    <td>机构编制、流程文件、会议纪要、项目审批档案</td>
+                  </tr>
+                  <tr>
+                    <td>国家空间策略</td>
+                    <td>财政返还比例、公共投资投向、政策优惠包</td>
+                    <td>财政预算/决算、项目库、招投标、政策汇编</td>
+                  </tr>
+                  <tr>
+                    <td>选择性强度</td>
+                    <td>资源集中指数、政策例外计数、对照差异</td>
+                    <td>统计数据、政策文本编码、差异化对照组</td>
+                  </tr>
+                  <tr>
+                    <td>空间效应</td>
+                    <td>不均衡指标、产业/人口/房价空间分化</td>
+                    <td>统计年鉴、遥感/POI、交易数据、访谈与观察</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+          <details>
+            <summary><span class="k">★</span><div><div class="t">四、写作结构（可直接套用）</div><div class="d">问题—框架—方法—发现—贡献。</div></div></summary>
+            <div class="content">
+              <ol>
+                <li>引出：为何是“新国家空间”候选（政策地位/制度例外）。</li>
+                <li>框架：国家空间过程→选择性→项目/策略→效应→反馈。</li>
+                <li>方法：材料如何对应每个箭头；对照组怎么选；如何避免概念泛化。</li>
+                <li>发现：先写项目（权力组织）再写策略（资源导向），最后写空间效应与治理张力。</li>
+                <li>讨论：你的案例是否修正既有命题（行动者、语境外推、机制识别）。</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* --------------------------
+   Data（你可在这里继续增补术语/文献/案例）
+   -------------------------- */
+const DATA = {
+  pages: [
+    {id:"overview",  title:"概览与路线图", crumb:"模块 00 / 概览与路线图", subtitle:"NSS：国家空间不是预设不变的‘领土容器’，而是在危机与治理变迁中被持续重构的社会—空间过程；核心机制是空间选择性与多尺度重组。"},
+    {id:"authors",   title:"提出者与核心文献", crumb:"模块 01 / 提出者与核心文献", subtitle:"以 Brenner 的系统化建构为核心，同时吸收并空间化延展 SRST 与空间选择性传统，形成可被经验研究调用的概念工具箱。"},
+    {id:"background",title:"理论提出背景", crumb:"模块 02 / 理论提出背景", subtitle:"1970年代以来的危机与治理变迁 + 空间转向、国家理论与尺度政治语汇，共同塑造了 NSS 的问题起点与解释目标。"},
+    {id:"position",  title:"理论核心定位", crumb:"模块 03 / 理论核心定位", subtitle:"NSS 是国家—空间解释框架：解释国家权力、政策与资本循环如何在多尺度/多领域空间中被组织并产生不均衡结果。"},
+    {id:"contents",  title:"理论主要内容", crumb:"模块 04 / 理论主要内容", subtitle:"用 9 个命题把框架拆开：本体论—历史结构—空间过程—选择性机制—项目/策略工具—结果与反馈。"},
+    {id:"glossary",  title:"核心专有名词释义", crumb:"模块 05 / 核心专有名词释义", subtitle:"术语=工具。每个词条都回答：严格含义是什么？常见误读在哪里？如何在案例中识别？"},
+    {id:"logic",     title:"内部层次逻辑", crumb:"模块 06 / 内部层次逻辑", subtitle:"把理论写成因果链与反馈回路，并为每条箭头配置证据类型与指标。"},
+    {id:"cases",     title:"典型应用案例", crumb:"模块 07 / 典型应用案例", subtitle:"欧盟城市治理、德国欧区域、南京河西新城、城市群制度化：用同一套概念工具读不同空间对象。"},
+    {id:"impact",    title:"贡献与影响", crumb:"模块 08 / 贡献与影响", subtitle:"将国家重新置于批判空间政治经济分析中心，并提供项目/策略/选择性等可操作概念工具。"},
+    {id:"limits",    title:"局限与后续发展", crumb:"模块 09 / 局限与后续发展", subtitle:"概念宏大与操作化成本高、行动者机制不足、尺度概念泛化风险、语境外推问题；以可检验化推进后续研究。"},
+    {id:"appendix",  title:"附录：研究设计模板", crumb:"模块 A / 研究设计模板", subtitle:"把 NSS 变成论文方法章节：研究问题 → 假设 → 指标/材料 → 对照 → 发现与讨论。"}
+  ],
+
+  literature: [
+    {priority:"★★★★★", title:"New State Spaces: Urban Governance and the Rescaling of Statehood", titleZh:"新国家空间：城市治理与国家形态的尺度重构（中译本 2020）", year:"2004", author:"Neil Brenner",
+     point:"系统提出国家空间过程框架，强调尺度重组与空间选择性；提出国家空间项目/策略等工具。",
+     expand:["入门抓手：先读导论与框架章节，明确“国家空间是过程”。","写作可直接套用：空间过程→选择性→项目/策略→新空间与效应。"], tags:["正典","框架","工具箱"]},
+    {priority:"★★★★☆", title:"Globalisation as Reterritorialisation: The re-scaling of urban governance in the European Union", titleZh:"全球化与再地域化：欧盟城市管治的尺度重组（中译 2008）", year:"1999", author:"Neil Brenner",
+     point:"提出全球化=再地域化论断；城市治理变迁是尺度政治表达。",
+     expand:["适合写综述的问题起点段：反国家衰落/空心化叙事。","解释跨境/超国家治理不等于国家退场，而是多尺度重组。"], tags:["问题意识","尺度政治"]},
+    {priority:"★★★★☆", title:"Metropolitan Institutional Reform and the Rescaling of State Space in Contemporary Western Europe", year:"2003", author:"Neil Brenner",
+     point:"将大都市治理改革视为国家空间性危机的结构与策略性表达：更增长导向、更竞争力导向。",
+     expand:["解释大都市尺度为何成为国家重构前沿。","写案例时抓：制度改革如何改变权力与政策能力的尺度配置。"], tags:["大都市治理","尺度重组"]},
+    {priority:"★★★☆☆", title:"Spatial selectivity of the state? The regulationist enigma and local struggles over economic governance", year:"1997", author:"Martin Jones",
+     point:"提出国家空间选择性概念，为 NSS 提供关键母概念之一。",
+     expand:["空间选择性是制度化差别化治理与资源配置。","Jones 更偏地方治理语境；Brenner 将其纳入系统框架。"], tags:["空间选择性","理论母体"]},
+    {priority:"★★★☆☆", title:"The Future of the Capitalist State", year:"2002", author:"Bob Jessop",
+     point:"SRST 系统表述：项目/策略/选择性逻辑，为 NSS 的空间化提供理论母体。",
+     expand:["适合写理论谱系：NSS 如何空间化 SRST。","避免误读：强调结构约束与策略性选择的关系。"], tags:["SRST","国家理论"]}
+  ],
+
+  propositions: [
+    {key:"1", title:"本体论命题：国家空间是社会建构、动态演化且多维的",
+     brief:"国家空间=国家空间性；可区分狭义/完整/表征等层次。",
+     content:["核心点：不要把国家空间理解为行政区划本身；它是权力组织与干预行为的空间性。","写作提示：三分法可用于概念界定：狭义（机构）—完整（政策与效应）—表征（空间想象与话语）。"]},
+    {key:"2", title:"历史—结构命题：国家空间重构与危机—调节转型相互嵌套",
+     brief:"危机/积累方式转变 + 国家管制模式转型 + 利益联盟重组，推动空间重构。",
+     content:["把空间变化放到“危机—应对—再危机”的历史序列中解释。","用政策转向、财政制度、产业结构与危机事件作为背景证据。"]},
+    {key:"3", title:"空间过程命题：再领域化 + 再边界化 + 尺度重组（交织发生）",
+     brief:"尺度重组意味着国家尺度首要性变化与多尺度制度层级形成；边界/领域也会被重写。",
+     content:["再领域化：制度安排重写既有地域关系（飞地/跨界合作区）。","再边界化：边界不消失，而是功能、叙事与治理方式改变。","尺度重组：权力与治理活动在不同尺度层级间重新配置（不等于区划调整）。"]},
+    {key:"4", title:"治理机制命题：国家空间选择性是连接宏观动因与空间结果的核心中介",
+     brief:"国家对地区/尺度差别化配置权力、政策与资源，生产不均衡空间格局。",
+     content:["避免把选择性写成‘偏好’，要有制度化证据：授权、财政规则、公共项目投射、考核动员。","操作化方向：资源集中度/政策例外性指标 + 对照组。"]},
+    {key:"5", title:"工具性命题：选择性主要通过国家空间项目/策略实现",
+     brief:"项目偏权力组织重构；策略偏政策与资源的空间导向。",
+     content:["项目：谁来管、怎么管、权责怎么配（机构设置、审批链条）。","策略：钱与政策投向哪里、通过什么政策包（财政/项目清单）。","写作技巧：先写项目再写策略。"]},
+    {key:"6", title:"演化轨迹命题：去中心化/集中化等张力并存（非单线性）",
+     brief:"可在尺度维度×领域维度组合中观察倾向性变动。",
+     content:["四对张力：中心化/去中心化、统一性/定制化、单一性/多样性、平等化/集中化。","把张力写成‘同时发生但方向不同’的机制，而非二选一。"]},
+    {key:"7", title:"城市—区域命题：次国家空间常成为国家重构的战略性新空间",
+     brief:"城市—区域/大都市区改革与企业家主义治理，是新国家空间生成的重要表达。",
+     content:["把大都市改革、城市群平台、国家级新区视为国家空间重构的前沿地带。","平台化治理如何改变政策能力与资源配置的尺度结构，是关键写点。"]},
+    {key:"8", title:"结果命题：新国家空间呈马赛克式、分层化，并可能加剧不均衡与竞争张力",
+     brief:"竞争逻辑可能从城市尺度转移到区域尺度，带来合作不稳定与治理困境。",
+     content:["经验表现：空间特权、资源聚焦、跨辖区竞争外部性、逐底竞争与后续协调治理。","用“效应—张力—修复”闭环收尾。"]},
+    {key:"9", title:"反馈命题：空间效应反过来塑造后续项目与策略（危机管理的危机）",
+     brief:"治理手段制造新矛盾，推动制度修复与再次重构。",
+     content:["NSS 强调循环与反馈，而不是一次性重组。","经验抓手：纠偏、协调治理升级、监督与统筹强化。"]}
+  ],
+
+  terms: [
+    {id:"state_spatiality", zh:"国家空间 / 国家空间性", en:"state space / state spatiality", cat:"core",
+     meaning:"国家权力组织与国家干预行为的空间性；作为社会—空间关系的舞台、工具与结果，而非静态容器。",
+     confusions:["误读为政府部门地理分布或国土空间本身。","只把 state 当政府，忽略国家作为权力关系与制度结构。"],
+     howToUse:["概念界定强调过程性，并说明组织空间/领土边界/表征话语三维。","案例从权力/政策/资源如何被组织切入。"],
+     example:"不同层级政府对新区、城市群等空间对象差异化配置，体现国家空间性。"},
+    {id:"rescaling", zh:"尺度重组", en:"rescaling", cat:"process",
+     meaning:"国家权力与治理活动在不同尺度层级间重新配置，体现国家尺度首要性变化与多尺度制度层级形成。",
+     confusions:["把任何跨层级协同都叫尺度重组（概念泛化）。","把尺度重组等同行政区划调整（区划只是可能结果）。"],
+     howToUse:["用权限上移/下放、平台化机构、跨域协同机制、财政规则变化做证据。","一定要有对照组。"],
+     example:"新区管委会、城市群协同机构、跨区域平台可体现尺度上移/下移组合。"},
+    {id:"spatial_projects", zh:"国家空间项目/工程", en:"state spatial projects", cat:"tools",
+     meaning:"偏向权力在不同层级/领域的组织与重组（权力如何被空间化组织）。项目应理解为制度安排组合，而非工程建设。",
+     confusions:["误读为基建工程/开发项目。","与策略混用导致论述不清。"],
+     howToUse:["回答谁来管/如何管/权责怎么配。","材料：机构设置、权限清单、审批链条。"],
+     example:"设立指挥部/管委会、简化审批链条等体现项目。"},
+    {id:"spatial_strategies", zh:"国家空间策略", en:"state spatial strategies", cat:"tools",
+     meaning:"偏向引导资本积累与发展路径的空间干预方案（政策与资源如何指向特定空间对象）。",
+     confusions:["与国家空间战略混用，弱化策略性。","只讲口号不讲资源投射链。"],
+     howToUse:["回答钱与政策投向哪里/为什么是那里/通过什么政策包。","材料：财政返还、项目清单、优惠政策包。"],
+     example:"城市群规划、重点项目配置、差别化扶持政策塑造空间偏向。"},
+    {id:"spatial_selectivity", zh:"国家空间选择性", en:"state spatial selectivity", cat:"tools",
+     meaning:"国家在权力、政策与资源配置上差别化对待空间的倾向与过程，是解释不均衡的关键机制。",
+     confusions:["写成价值判断意义的偏爱。","与资本空间选择性混淆。"],
+     howToUse:["制度例外（项目）+资源投射（策略）两条证据链；最好有对照组。","可做指标：资源投射集中指数、政策例外计数。"],
+     example:"河西新城可用财政返还与公共项目投射识别国家选择性强度。"},
+    {id:"hollowing_out", zh:"空心化（争论对象）", en:"hollowing out", cat:"debates",
+     meaning:"非 NSS 主张而是反驳对象：认为国家被市场/跨国资本掏空；NSS强调应理解为重组。",
+     confusions:["把任何放权都视为空心化。","忽略权力可能通过上移/平台化回收。"],
+     howToUse:["区分形式放权与实质重组；用权力上移、财政规则与重大项目集中做经验抓手。"],
+     example:"通过专门机构上移并集中权力与资源。"},
+    {id:"crisis", zh:"危机管理的危机", en:"crisis of crisis management", cat:"debates",
+     meaning:"竞争性空间策略制造新矛盾（逐底竞争、差距扩大），推动制度修复与下一轮重构，提示需建模反馈回路。",
+     confusions:["只写一次重组，不写反馈与纠偏。"],
+     howToUse:["用效应—张力—修复闭环收束讨论。"],
+     example:"城市—区域竞争导致逐底竞争与后续协调治理。"}
+  ],
+
+  cases: [
+    {id:"eu", title:"欧盟城市治理：再地域化与尺度政治", tags:["再地域化","尺度政治","尺度重组"],
+     bg:"在全球化脱嵌/国家衰落争论中，强调全球化应理解为再地域化与再尺度化；城市治理变化是尺度政治表达。",
+     method:"政治经济学取向的理论—制度分析与跨案例比较。",
+     findings:["国家/城市等相对固定领土组织是全球化展开的制度—空间前提与媒介。","治理尺度重新排序改变政策能力与发展路径。"],
+     howUse:["把对象从城市内部治理扩展为城市治理—国家空间重构—多尺度制度层级联动。","追踪政策与机构在何种尺度被重新组织。"],
+     limits:"概念宏大、指标化难；欧洲语境偏强。"},
+    {id:"euro", title:"德国欧区域：区位政治与竞争性国家空间", tags:["欧区域","区位政治","空间选择性"],
+     bg:"德国统一后区位竞争与欧区域建构，展示新自由主义化如何通过新的区域尺度与领土组合被制度化。",
+     method:"批判话语—制度分析：追踪谁推动、用什么制度做实尺度。",
+     findings:["欧区域不是自然功能区，而是制度化空间建构。","区位竞争强化对关键地域与节点的优先化，体现空间选择性。"],
+     howUse:["把区域化从功能主义转向政治经济解释：谁推动、制度如何做实、叙事与工具是什么？"],
+     limits:"制度可比性问题；跨语境移植需谨慎。"},
+    {id:"hexi", title:"南京河西新城：国家空间选择性与房地产化（操作化示范）", tags:["项目/策略","空间选择性","资源投射"],
+     bg:"用国家空间选择性解释新城开发与房地产化，强调强政府制度下国有资源配置能力的重要性。",
+     method:"制度分析+量化检验：市—区权责梳理、权力上移与资源集中识别、地租差—投资对照。",
+     findings:["设立指挥部与审批简化体现项目（权力组织重构）。","财政返还与公共项目投射体现策略（资源导向）。","空间效应：开发与投资集聚、房价攀升。"],
+     howUse:["把项目/策略/选择性具体化为变量：机构、授权、财政规则、项目投射、投资与房价数据。"],
+     limits:"单案例外推风险；金融与微观行动者机制刻画可再加强。"},
+    {id:"cluster", title:"城市群制度化：国家空间选择性的制度化形式", tags:["尺度上移/下移","空间策略","表征空间"],
+     bg:"城市群被视为应对城市企业主义危机的新型治理形式：在项目与策略支持下优先发展，但企业主义逻辑可能转移到区域尺度。",
+     method:"历史—政策分析+统计描述（更细化识别依赖具体数据）。",
+     findings:["城市群制度化与国家规划/政策工具紧密相关。","作为尺度上移+下移的制度试验：缓解无序竞争并重组治理权。","合作不稳定与区域认同不足提示需结合表征空间分析。"],
+     howUse:["解释空间特权来源：谁被优先化、通过什么制度与资源链条实现？"],
+     limits:"因果识别挑战；需要更强对照与指标化。"}
+  ],
+
+  impacts: [
+    {key:"1", title:"学术贡献：把国家重新置于批判空间政治经济分析中心",
+     body:["反对国家=单一尺度/固定容器的默认；反对全球化=国家空心化的简单叙事。","将国家权力理解为多尺度上通过空间选择性持续重组的过程。"]},
+    {key:"2", title:"方法论贡献：形成可被经验研究调用的概念工具箱",
+     body:["把 SRST 的项目/策略/选择性逻辑与空间分析耦合：项目、策略、选择性、尺度重组等。","促使研究者将城市治理、区域政策与国家重构放在同一因果链上审视。"]},
+    {key:"3", title:"政策与实践意义：解释空间特权的制度来源与治理张力",
+     body:["解释城市群、新区、开发区等为何获得优先性，以及如何通过制度与资源投射实现。","也解释其副作用：不均衡、竞争外部性、治理张力与后续制度修复。"]}
+  ],
+
+  limits: [
+    {key:"1", title:"操作化成本高：概念宏大、跨案例可比性难",
+     body:["缺少指标与对照组时，尺度政治/再地域化等容易沦为解释性标签。","路径：把选择性落到制度例外与资源投射差异，并做对照。"]},
+    {key:"2", title:"行动者与微观机制讨论不足",
+     body:["行动者机制刻画常不足，尺度/领域之外空间维度覆盖有限。","机会：引入官僚链条、企业/社会组织策略、金融机制等微观证据。"]},
+    {key:"3", title:"尺度概念泛化风险",
+     body:["重尺度化可能被过度泛化为万能解释。","路径：严格界定尺度重组标准，并识别与网络化治理、市场驱动等机制的相对贡献。"]},
+    {key:"4", title:"语境外推风险：欧洲经验偏强",
+     body:["经典经验素材多来自西欧，外推需制度转换与概念降阶。","建议：明确改写了哪些假设，并用制度比较说明差异。"]},
+    {key:"5", title:"后续发展：走向可检验化与机制细化",
+     body:["制度例外（机构/审批/财政规则）+资源投射（财政/项目/动员）+对照组。","可构造资源投射集中指数，结合过程追踪、文本编码与量化对照。"]}
+  ]
+};
+
+/* --------------------------
+   Helpers
+   -------------------------- */
+function el(tag, attrs={}, children=[]){
+  const node = document.createElement(tag);
+  Object.entries(attrs).forEach(([k,v])=>{
+    if(v === null || v === undefined || v === false) return;
+    if(k==="class") node.className = v;
+    else if(k==="html") node.innerHTML = v;
+    else if(v === true) node.setAttribute(k, "");
+    else node.setAttribute(k, v);
+  });
+  (Array.isArray(children)?children:[children]).forEach(ch=>{
+    if(ch===null || ch===undefined) return;
+    node.appendChild(typeof ch==="string" ? document.createTextNode(ch) : ch);
+  });
+  return node;
+}
+function catLabel(cat){
+  return ({core:"核心概念", process:"空间过程", tools:"分析工具", debates:"关键争论"}[cat]||"术语");
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"]/g, m=>({ "&":"&amp;", "<":"&lt;", ">":"&gt;", "\"":"&quot;" }[m]));
+}
+
+/* Drawer */
+let drawer;
+function ensureDrawer(){
+  if(drawer) return drawer;
+  drawer = el("div", {id:"drawer", style:`
+    position:fixed; inset:0; background: rgba(0,0,0,.50);
+    display:none; align-items:flex-end; justify-content:center;
+    padding: 18px; z-index: 9999;
+  `});
+  const panel = el("div", {id:"drawerPanel", style:`
+    width:min(920px, 96vw); max-height: 86vh; overflow:auto;
+    border-radius: 18px; border:1px solid var(--line);
+    background: var(--panel); box-shadow: var(--shadow);
+  `});
+  const head = el("div", {style:"padding:12px 14px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:center; justify-content:space-between;"});
+  head.appendChild(el("div", {id:"drawerTitle", style:"font-weight:700; font-size:14px"}));
+  const close = el("button", {class:"btn", id:"drawerClose"}, ["关闭"]);
+  close.addEventListener("click", ()=>{drawer.style.display="none";});
+  head.appendChild(close);
+  panel.appendChild(head);
+  panel.appendChild(el("div", {id:"drawerBody", style:"padding:14px"}));
+  drawer.appendChild(panel);
+  drawer.addEventListener("click", (e)=>{ if(e.target===drawer) drawer.style.display="none"; });
+  document.body.appendChild(drawer);
+  return drawer;
+}
+function openDrawer(title, html){
+  ensureDrawer();
+  document.getElementById("drawerTitle").textContent = title;
+  document.getElementById("drawerBody").innerHTML = html;
+  drawer.style.display = "flex";
+}
+
+/* --------------------------
+   Renderers
+   -------------------------- */
+function renderLiterature(){
+  const tbody = document.querySelector("#litTable tbody");
+  tbody.innerHTML = "";
+  DATA.literature.forEach((it, idx)=>{
+    const tr = el("tr", {"data-idx": idx, "style":"cursor:pointer"});
+    tr.appendChild(el("td", {}, [it.priority]));
+    const tCell = el("td");
+    tCell.appendChild(el("div", {html:`<b>${escapeHtml(it.title)}</b>${it.titleZh?`<div class="muted" style="margin-top:4px">${escapeHtml(it.titleZh)}</div>`:""}`}));
+    tr.appendChild(tCell);
+    tr.appendChild(el("td", {}, [it.year]));
+    tr.appendChild(el("td", {}, [it.author]));
+    const pCell = el("td");
+    pCell.appendChild(el("div", {html: escapeHtml(it.point)}));
+    if(it.tags?.length){
+      const tags = it.tags.map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join("");
+      pCell.appendChild(el("div", {html:`<div style="margin-top:8px">${tags}</div>`}));
+    }
+    tr.appendChild(pCell);
+
+    tr.addEventListener("click", ()=>{
+      openDrawer(`文献：${it.title}`, `
+        <div style="line-height:1.75">
+          <div style="margin-bottom:10px"><span class="tag brand">${it.priority}</span> <span class="tag">${it.year}</span> <span class="tag">${escapeHtml(it.author)}</span></div>
+          ${it.titleZh?`<div class="muted" style="margin:6px 0 10px">${escapeHtml(it.titleZh)}</div>`:""}
+          <div style="margin:10px 0"><b>核心论点：</b>${escapeHtml(it.point)}</div>
+          <div style="margin:10px 0"><b>阅读/使用建议：</b>
+            <ul>${(it.expand||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+          </div>
+          <div class="muted" style="font-size:12px">提示：此处为学习摘要，不替代原文阅读。</div>
+        </div>
+      `);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  const input = document.getElementById("litSearch");
+  input.addEventListener("input", ()=>{
+    const q = input.value.trim().toLowerCase();
+    [...tbody.querySelectorAll("tr")].forEach(tr=>{
+      const idx = Number(tr.getAttribute("data-idx"));
+      const it = DATA.literature[idx];
+      const hay = `${it.priority} ${it.title} ${it.titleZh||""} ${it.year} ${it.author} ${it.point} ${(it.tags||[]).join(" ")}`.toLowerCase();
+      tr.style.display = hay.includes(q) ? "" : "none";
+    });
+  });
+}
+
+function renderPropositions(){
+  const wrap = document.getElementById("propWrap");
+  wrap.innerHTML = "";
+  DATA.propositions.forEach(p=>{
+    const det = el("details", {id:`prop_${p.key}`});
+    det.appendChild(el("summary", {}, [
+      el("span", {class:"k"}, [p.key]),
+      el("div", {}, [
+        el("div", {class:"t"}, [p.title]),
+        el("div", {class:"d"}, [p.brief])
+      ])
+    ]));
+    const content = el("div", {class:"content"});
+    content.appendChild(el("ul", {}, (p.content||[]).map(x=>el("li", {}, [x]))));
+    det.appendChild(content);
+    wrap.appendChild(det);
+  });
+}
+
+function renderTerms(){
+  const wrap = document.getElementById("termWrap");
+  const input = document.getElementById("termSearch");
+  const filter = document.getElementById("termFilter");
+
+  function draw(){
+    const q = input.value.trim().toLowerCase();
+    const cat = filter.value;
+    wrap.innerHTML = "";
+    const list = DATA.terms.filter(t=>{
+      const hay = `${t.zh} ${t.en} ${t.meaning} ${(t.confusions||[]).join(" ")} ${(t.howToUse||[]).join(" ")} ${t.example}`.toLowerCase();
+      const okQ = !q || hay.includes(q);
+      const okC = (cat==="all") || (t.cat===cat);
+      return okQ && okC;
+    });
+
+    if(!list.length){
+      wrap.appendChild(el("div", {class:"muted", style:"padding:10px 2px"}, ["没有匹配的词条。换个关键词或切换类别试试。"]));
+      return;
+    }
+
+    list.forEach(t=>{
+      const det = el("details", {id:`term_${t.id}`});
+      det.appendChild(el("summary", {}, [
+        el("span", {class:"k"}, ["#"]),
+        el("div", {}, [
+          el("div", {class:"t"}, [`${t.zh}（${t.en}）`]),
+          el("div", {class:"d"}, [t.meaning])
+        ])
+      ]));
+      const content = el("div", {class:"content"});
+      content.appendChild(el("div", {html:`<div style="margin-bottom:10px"><span class="tag brand">${catLabel(t.cat)}</span></div>`}));
+      content.appendChild(el("div", {html:`<b>严格含义：</b> ${escapeHtml(t.meaning)}`}));
+      content.appendChild(el("div", {class:"hr"}));
+      content.appendChild(el("div", {html:`<b>常见误读/歧义：</b>`}));
+      content.appendChild(el("ul", {}, (t.confusions||[]).map(x=>el("li", {}, [x]))));
+      content.appendChild(el("div", {html:`<b>怎么用（写作/研究设计）：</b>`}));
+      content.appendChild(el("ul", {}, (t.howToUse||[]).map(x=>el("li", {}, [x]))));
+      content.appendChild(el("div", {html:`<b>案例化提示：</b> ${escapeHtml(t.example)}`}));
+      det.appendChild(content);
+      wrap.appendChild(det);
+    });
+  }
+
+  input.addEventListener("input", draw);
+  filter.addEventListener("change", draw);
+  draw();
+}
+
+function renderCases(){
+  const wrap = document.getElementById("caseWrap");
+  wrap.innerHTML = "";
+  DATA.cases.forEach((c, idx)=>{
+    const det = el("details", {id:`case_${c.id}`, open: (idx===2)});
+    det.appendChild(el("summary", {}, [
+      el("span", {class:"k"}, ["案"]),
+      el("div", {}, [
+        el("div", {class:"t"}, [c.title]),
+        el("div", {class:"d"}, [c.bg])
+      ])
+    ]));
+    const content = el("div", {class:"content"});
+    content.appendChild(el("div", {html:`<div style="margin-bottom:10px">${(c.tags||[]).map(t=>`<span class="tag green">${escapeHtml(t)}</span>`).join("")}</div>`}));
+    content.appendChild(el("div", {html:`<b>背景：</b> ${escapeHtml(c.bg)}`}));
+    content.appendChild(el("div", {html:`<b>方法：</b> ${escapeHtml(c.method)}`}));
+    content.appendChild(el("div", {html:`<b>核心发现：</b>`}));
+    content.appendChild(el("ul", {}, (c.findings||[]).map(x=>el("li", {}, [x]))));
+    content.appendChild(el("div", {html:`<b>NSS 用法（可迁移步骤）：</b>`}));
+    content.appendChild(el("ol", {}, (c.howUse||[]).map(x=>el("li", {}, [x]))));
+    content.appendChild(el("div", {html:`<b>主要局限：</b> <span class="tag warn">注意</span> ${escapeHtml(c.limits)}`}));
+    det.appendChild(content);
+    wrap.appendChild(det);
+  });
+}
+
+function renderImpacts(){
+  const wrap = document.getElementById("impactWrap");
+  wrap.innerHTML = "";
+  DATA.impacts.forEach((it, idx)=>{
+    const det = el("details", {id:`impact_${it.key}`, open: idx===0});
+    det.appendChild(el("summary", {}, [
+      el("span", {class:"k"}, [it.key]),
+      el("div", {}, [
+        el("div", {class:"t"}, [it.title]),
+        el("div", {class:"d"}, ["点击展开细节。"])
+      ])
+    ]));
+    const c = el("div", {class:"content"});
+    c.appendChild(el("ul", {}, (it.body||[]).map(x=>el("li", {}, [x]))));
+    det.appendChild(c);
+    wrap.appendChild(det);
+  });
+}
+
+function renderLimits(){
+  const wrap = document.getElementById("limitWrap");
+  wrap.innerHTML = "";
+  DATA.limits.forEach((it, idx)=>{
+    const det = el("details", {id:`limit_${it.key}`, open: idx===0});
+    det.appendChild(el("summary", {}, [
+      el("span", {class:"k"}, [it.key]),
+      el("div", {}, [
+        el("div", {class:"t"}, [it.title]),
+        el("div", {class:"d"}, ["点击展开“问题—解决路径”。"])
+      ])
+    ]));
+    const c = el("div", {class:"content"});
+    c.appendChild(el("ul", {}, (it.body||[]).map(x=>el("li", {}, [x]))));
+    det.appendChild(c);
+    wrap.appendChild(det);
+  });
+
+  const det2 = el("details", {open:true, id:"limit_methods"});
+  det2.appendChild(el("summary", {}, [
+    el("span", {class:"k"}, ["✶"]),
+    el("div", {}, [
+      el("div", {class:"t"}, ["把后续发展写成研究议程：可检验化建议（速写版）"]),
+      el("div", {class:"d"}, ["制度例外 + 资源投射 + 对照组；混合方法补足行动者机制。"])
+    ])
+  ]));
+  const c2 = el("div", {class:"content"});
+  c2.appendChild(el("ol", {}, [
+    el("li", {}, ["制度文本追踪：是否出现跨尺度权力上移与例外性授权（机构设置、审批权、财政规则）？"]),
+    el("li", {}, ["资源投射指标化：财政返还比例、重大公共项目投向、动员资源强度；可构造资源投射集中指数。"]),
+    el("li", {}, ["对照组设计：非选定地区/同类新区/同级城市，用差异检验避免概念泛化。"]),
+    el("li", {}, ["过程追踪 + 文本编码 + 量化对照 + 访谈/观察：提升机制识别。"])
+  ]));
+  det2.appendChild(c2);
+  wrap.appendChild(det2);
+}
+
+/* --------------------------
+   Navigation + UI
+   -------------------------- */
+function setActivePage(pageId){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  const sec = document.getElementById(`section-${pageId}`);
+  if(sec) sec.classList.add("active");
+
+  document.querySelectorAll(".nav a").forEach(a=>a.classList.remove("active"));
+  const link = document.querySelector(`.nav a[data-target="${pageId}"]`);
+  if(link) link.classList.add("active");
+
+  const page = DATA.pages.find(p=>p.id===pageId) || DATA.pages[0];
+  document.getElementById("crumb").textContent = page.crumb;
+  document.getElementById("pageTitle").textContent = page.title;
+  document.getElementById("subTitle").textContent = page.subtitle;
+
+  window.scrollTo({top:0, behavior:"auto"});
+}
+
+function expandCollapseInActive(expand=true){
+  const sec = document.querySelector(".section.active");
+  if(!sec) return;
+  sec.querySelectorAll("details").forEach(d=>d.open = expand);
+}
+
+/* Global search */
+function buildSearchIndex(){
+  const items = [];
+  DATA.terms.forEach(t=>{
+    items.push({type:"术语", title:`${t.zh} (${t.en})`, page:"glossary", anchor:`term_${t.id}`,
+      hay:`${t.zh} ${t.en} ${t.meaning} ${(t.confusions||[]).join(" ")} ${(t.howToUse||[]).join(" ")} ${t.example}`});
+  });
+  DATA.cases.forEach(c=>{
+    items.push({type:"案例", title:c.title, page:"cases", anchor:`case_${c.id}`,
+      hay:`${c.title} ${c.bg} ${c.method} ${(c.findings||[]).join(" ")} ${(c.tags||[]).join(" ")} ${(c.howUse||[]).join(" ")} ${c.limits}`});
+  });
+  DATA.propositions.forEach(p=>{
+    items.push({type:"命题", title:p.title, page:"contents", anchor:`prop_${p.key}`,
+      hay:`${p.title} ${p.brief} ${(p.content||[]).join(" ")}`});
+  });
+  DATA.literature.forEach(l=>{
+    items.push({type:"文献", title:`${l.title} (${l.year})`, page:"authors", anchor:"litTable",
+      hay:`${l.title} ${l.titleZh||""} ${l.year} ${l.author} ${l.point} ${(l.tags||[]).join(" ")}`});
+  });
+  return items;
+}
+
+function attachGlobalSearch(){
+  const index = buildSearchIndex();
+  const input = document.getElementById("globalSearch");
+  const results = document.getElementById("searchResults");
+
+  input.addEventListener("input", ()=>{
+    const q = input.value.trim().toLowerCase();
+    if(!q){ results.style.display="none"; results.innerHTML=""; return; }
+    const hits = index.filter(x => x.hay.toLowerCase().includes(q)).slice(0, 12);
+    results.innerHTML = "";
+    if(!hits.length){
+      results.appendChild(el("div", {class:"muted", style:"font-size:12px"}, ["没有匹配结果。"]));
+      results.style.display = "block";
+      return;
+    }
+    hits.forEach(h=>{
+      const item = el("div", {class:"srItem"});
+      item.appendChild(el("div", {class:"srType"}, [h.type]));
+      item.appendChild(el("div", {class:"srTitle"}, [h.title]));
+      item.addEventListener("click", ()=>{
+        setActivePage(h.page);
+        results.style.display = "none";
+        setTimeout(()=>{
+          const target = document.getElementById(h.anchor);
+          if(target){
+            target.scrollIntoView({behavior:"smooth", block:"center"});
+            target.classList.add("flash");
+            setTimeout(()=>target.classList.remove("flash"), 900);
+            if(target.tagName.toLowerCase()==="details") target.open = true;
+          } else if(h.anchor==="litTable"){
+            const t = document.getElementById("litTable");
+            t?.classList.add("flash");
+            setTimeout(()=>t?.classList.remove("flash"), 900);
+          }
+        }, 80);
+      });
+      results.appendChild(item);
+    });
+    results.style.display = "block";
+  });
+}
+
+/* Theme */
+function applyTheme(next){
+  document.documentElement.setAttribute("data-theme", next);
+  localStorage.setItem("nss_theme", next);
+}
+
+/* Mermaid rendering */
+let MERMAID_SRC = null;
+function renderMermaid(){
+  if(!window.mermaid) return;
+  const chart = document.getElementById("mermaidChart");
+  if(!chart) return;
+  if(MERMAID_SRC === null) MERMAID_SRC = chart.textContent;
+  chart.removeAttribute("data-processed");
+  chart.textContent = MERMAID_SRC;
+
+  const theme = (document.documentElement.getAttribute("data-theme")==="light") ? "default" : "dark";
+  mermaid.initialize({ startOnLoad: false, theme });
+  try{ mermaid.run({ nodes:[chart] }); }catch(e){}
+}
+
+/* Init */
+(function init(){
+  const stored = localStorage.getItem("nss_theme");
+  if(stored) applyTheme(stored);
+
+  renderLiterature();
+  renderPropositions();
+  renderTerms();
+  renderCases();
+  renderImpacts();
+  renderLimits();
+  attachGlobalSearch();
+  renderMermaid();
+
+  document.querySelectorAll(".nav a").forEach(a=>{
+    a.addEventListener("click", (e)=>{
+      e.preventDefault();
+      const target = a.getAttribute("data-target");
+      history.replaceState(null, "", `#${target}`);
+      setActivePage(target);
+    });
+  });
+
+  const hash = (location.hash || "").replace("#","");
+  if(hash && DATA.pages.some(p=>p.id===hash)) setActivePage(hash);
+  else setActivePage("overview");
+
+  document.getElementById("btnPrint").addEventListener("click", ()=>window.print());
+  document.getElementById("btnTheme").addEventListener("click", ()=>{
+    const cur = (document.documentElement.getAttribute("data-theme")==="light") ? "light" : "dark";
+    const next = (cur==="light") ? "dark" : "light";
+    applyTheme(next);
+    renderMermaid();
+  });
+  document.getElementById("btnExpandAll").addEventListener("click", ()=>expandCollapseInActive(true));
+  document.getElementById("btnCollapseAll").addEventListener("click", ()=>expandCollapseInActive(false));
+})();
+</script>
+</body>
+</html>
