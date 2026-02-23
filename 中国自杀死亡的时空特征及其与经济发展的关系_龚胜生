@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>中国自杀死亡的时空特征研究 | 学术可视化</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f6f1;
+  --surface: #ffffff;
+  --ink: #1c1c1e;
+  --ink-soft: #48484a;
+  --ink-muted: #8e8e93;
+  --teal: #2d6a6a;
+  --teal-light: #e8f3f3;
+  --amber: #b45309;
+  --amber-light: #fef3c7;
+  --rose: #9f1239;
+  --rose-light: #fff1f2;
+  --border: #e5e1d8;
+  --shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── CRISIS BANNER ── */
+.crisis-banner {
+  background: var(--teal);
+  color: #fff;
+  text-align: center;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.crisis-banner a { color: #a7f3d0; text-decoration: none; font-weight: 500; }
+.crisis-banner a:hover { text-decoration: underline; }
+
+/* ── NAV ── */
+nav {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 3rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: sticky;
+  top: 2.2rem;
+  z-index: 100;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+  overflow-x: auto;
+}
+.nav-logo {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--teal);
+  white-space: nowrap;
+  padding: 1rem 0;
+  margin-right: 1rem;
+}
+nav a {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 1rem 0;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+nav a:hover { color: var(--teal); border-bottom-color: var(--teal); }
+
+/* ── HERO ── */
+.hero {
+  padding: 5rem 3rem 4rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.hero-kicker {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 1.2rem;
+}
+.hero h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+  max-width: 720px;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin-bottom: 2rem;
+}
+.hero-meta span { display: flex; align-items: center; gap: 0.4rem; }
+.hero-abstract {
+  background: var(--surface);
+  border-left: 3px solid var(--teal);
+  padding: 1.5rem 2rem;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.85;
+  max-width: 760px;
+  box-shadow: var(--shadow);
+}
+
+/* ── SECTION ── */
+section { padding: 4rem 3rem; max-width: 960px; margin: 0 auto; }
+section + section { padding-top: 0; }
+
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 1.8rem;
+}
+.section-body {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.9;
+  max-width: 700px;
+  margin-bottom: 2rem;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 3rem;
+}
+
+/* ── STATS STRIP ── */
+.stats-strip {
+  background: var(--teal);
+  color: #fff;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 2.5rem 3rem;
+}
+.stat-item { text-align: center; padding: 0 1rem; }
+.stat-item + .stat-item { border-left: 1px solid rgba(255,255,255,0.2); }
+.stat-num {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+}
+.stat-label {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  line-height: 1.4;
+}
+
+/* ── TIMELINE TABS ── */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  padding: 0.7rem 1.4rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--ink-muted);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+.tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); font-weight: 500; }
+.tab-btn:hover:not(.active) { color: var(--ink); }
+
+.tab-panel { display: none; animation: fadeIn 0.3s; }
+.tab-panel.active { display: block; }
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ── CHART BARS ── */
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.bar-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 60px;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.8rem;
+}
+.bar-row label { color: var(--ink-soft); text-align: right; font-size: 0.78rem; }
+.bar-track {
+  height: 20px;
+  background: var(--teal-light);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--teal);
+  border-radius: 3px;
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1s cubic-bezier(0.22,1,0.36,1);
+  display: flex;
+  align-items: center;
+}
+.bar-val { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: var(--teal); font-weight: 500; }
+
+/* ── TIME PATTERNS ── */
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+.time-card {
+  background: var(--surface);
+  padding: 1.4rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  position: relative;
+}
+.time-card:hover { background: var(--teal-light); }
+.time-card.open { background: var(--teal); color: #fff; }
+.time-card h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+.time-card .peak {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--teal);
+  margin-bottom: 0.3rem;
+}
+.time-card.open .peak { color: #a7f3d0; }
+.time-card .sub { font-size: 0.75rem; color: var(--ink-muted); }
+.time-card.open .sub { color: rgba(255,255,255,0.7); }
+.time-detail {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.85);
+}
+.time-card.open .time-detail { max-height: 200px; margin-top: 0.8rem; }
+
+/* ── REGION TABLE ── */
+.region-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.region-table th {
+  background: var(--teal);
+  color: #fff;
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+}
+.region-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.region-table tr:hover td { background: var(--teal-light); }
+.region-table tr.expanded td { background: var(--teal-light); }
+.expand-row td {
+  background: var(--teal-light) !important;
+  padding: 0 1rem;
+  cursor: default;
+}
+.expand-content {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease, padding 0.3s;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+.expand-content.open { max-height: 200px; padding: 0.8rem 0; }
+.rate-pill {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+.rate-high { background: #fee2e2; color: #991b1b; }
+.rate-mid  { background: #fef3c7; color: #92400e; }
+.rate-low  { background: #d1fae5; color: #065f46; }
+
+/* ── FINDINGS ACCORDION ── */
+.finding-item {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  transition: box-shadow 0.3s;
+}
+.finding-item:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+.finding-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.finding-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--surface);
+  background: var(--teal);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.finding-title { font-size: 0.92rem; font-weight: 600; flex: 1; }
+.finding-arrow {
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  transition: transform 0.3s;
+}
+.finding-item.open .finding-arrow { transform: rotate(90deg); }
+.finding-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.45s cubic-bezier(0.22,1,0.36,1);
+  font-size: 0.87rem;
+  color: var(--ink-soft);
+  line-height: 1.85;
+}
+.finding-item.open .finding-body { max-height: 400px; }
+.finding-body-inner { padding: 0 1.5rem 1.5rem 3.6rem; }
+.finding-highlight {
+  background: var(--teal-light);
+  border-left: 3px solid var(--teal);
+  padding: 0.6rem 1rem;
+  font-size: 0.82rem;
+  color: var(--teal);
+  border-radius: 0 4px 4px 0;
+  margin-top: 0.8rem;
+  font-weight: 500;
+}
+
+/* ── ECON CARDS ── */
+.econ-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.econ-card {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.5rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.econ-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--teal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.econ-card:hover::before, .econ-card.active::before { transform: scaleX(1); }
+.econ-card:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.econ-card.active { background: var(--teal-light); border-color: var(--teal); }
+.econ-indicator {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 0.5rem;
+}
+.econ-title { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem; }
+.econ-r { font-family: 'IBM Plex Mono', monospace; font-size: 1.4rem; font-weight: 500; color: var(--teal); }
+.econ-desc { font-size: 0.78rem; color: var(--ink-muted); margin-top: 0.3rem; }
+
+.econ-detail-box {
+  background: var(--surface);
+  border: 1px solid var(--teal);
+  border-radius: 6px;
+  padding: 1.5rem 2rem;
+  font-size: 0.87rem;
+  color: var(--ink-soft);
+  line-height: 1.85;
+  display: none;
+  animation: fadeIn 0.3s;
+  box-shadow: var(--shadow);
+}
+.econ-detail-box.visible { display: block; }
+
+/* ── CAVEAT BOX ── */
+.caveat-box {
+  background: var(--amber-light);
+  border: 1px solid #fcd34d;
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  font-size: 0.85rem;
+  color: #78350f;
+  line-height: 1.8;
+  margin-top: 1rem;
+}
+.caveat-box h4 { font-weight: 600; margin-bottom: 0.4rem; color: var(--amber); }
+
+/* ── CRISIS FOOTER ── */
+.crisis-footer {
+  background: var(--rose-light);
+  border-top: 2px solid #fecdd3;
+  padding: 2.5rem 3rem;
+  text-align: center;
+}
+.crisis-footer h3 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1rem;
+  color: var(--rose);
+  margin-bottom: 0.8rem;
+}
+.crisis-footer p { font-size: 0.85rem; color: #6b1c2c; line-height: 1.8; }
+.crisis-footer .hotline {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--rose);
+  display: block;
+  margin: 0.8rem 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.45);
+  padding: 2rem 3rem;
+  text-align: center;
+  font-size: 0.72rem;
+  line-height: 2;
+}
+
+/* ── REVEAL ── */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.6s, transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+.reveal.visible { opacity: 1; transform: none; }
+
+@media (max-width: 700px) {
+  .stats-strip { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .stat-item + .stat-item { border: none; }
+  .econ-grid { grid-template-columns: 1fr; }
+  nav { padding: 0 1rem; }
+  section { padding: 3rem 1.5rem; }
+  .hero { padding: 3rem 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- CRISIS BANNER -->
+<div class="crisis-banner">
+  📌 如您或您认识的人正处于心理危机，请拨打 <strong>北京心理危机研究与干预中心：010-82951332</strong> &nbsp;|&nbsp; <a href="tel:400-161-9995">全国心理援助热线：400-161-9995</a>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">中国自杀死亡时空研究</div>
+  <a href="#overview">研究概述</a>
+  <a href="#temporal">时间规律</a>
+  <a href="#spatial">空间分布</a>
+  <a href="#evolution">时空演化</a>
+  <a href="#economy">经济关联</a>
+  <a href="#findings">主要结论</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="overview">
+  <div class="hero-kicker">学术研究可视化 · 热带地理 2023年第9期</div>
+  <h1>中国自杀死亡的时空特征<br>及其与经济发展的关系</h1>
+  <div class="hero-meta">
+    <span>👤 龚胜生 · 李春明 · 肖克梅</span>
+    <span>🏫 华中师范大学 城市与环境科学学院</span>
+    <span>📅 研究时段：2000—2018年</span>
+    <span>📍 研究范围：全国2851个县域单元</span>
+  </div>
+  <div class="hero-abstract">
+    本研究通过Python技术从互联网获取12,276个自杀死亡案例数据，采用数理统计与地理空间分析方法，系统揭示中国自杀死亡的时空规律及其与经济发展的关联机制。研究发现：案例自杀率与人均GDP、城镇化率均呈显著正相关，贫富差距是导致心理失衡的重要因素，只有共同富裕之路才是人民的健康之路。
+  </div>
+</div>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-num" id="cnt1">0</div>
+    <div class="stat-label">有效自杀死亡案例数</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="cnt2">0</div>
+    <div class="stat-label">研究覆盖县域单元</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">90.98%</div>
+    <div class="stat-label">案例集中于东南半壁</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">r=0.944</div>
+    <div class="stat-label">案例数与GDP相关系数</div>
+  </div>
+</div>
+
+<hr class="divider" style="margin-top:3rem">
+
+<!-- TEMPORAL SECTION -->
+<section id="temporal">
+  <div class="section-label reveal">时间特征</div>
+  <h2 class="section-title reveal">自杀死亡的时间规律</h2>
+  <p class="section-body reveal">
+    研究在年、季、月、日、时五个尺度上揭示了中国自杀死亡案例数的时间分布规律。
+    点击下方各时间尺度卡片，查看详细分析与解读。
+  </p>
+
+  <div class="time-grid reveal" id="timeGrid">
+
+    <div class="time-card" onclick="toggleTime(this)">
+      <h4>年际趋势</h4>
+      <div class="peak">总体上升</div>
+      <div class="sub">2000—2018年</div>
+      <div class="time-detail">
+        2000—2007年缓慢增加（年均+19例）；2008—2016年迅速增加（年均+129例），峰值达年1,512例；2017—2018年略有回落，维持在年均1,100例左右。增长部分原因为互联网普及提高了数据可获得性。
+      </div>
+    </div>
+
+    <div class="time-card" onclick="toggleTime(this)">
+      <h4>季节规律</h4>
+      <div class="peak">夏季高发</div>
+      <div class="sub">5—6月峰值，2—3月低谷</div>
+      <div class="time-detail">
+        夏季（5、6月）为自杀死亡高峰期，冬季（2、3月）为低谷期。高温气候条件比低温更易引发冲动行为，与意大利、日本等地研究结论一致。
+      </div>
+    </div>
+
+    <div class="time-card" onclick="toggleTime(this)">
+      <h4>月内规律</h4>
+      <div class="peak">1、10、20日</div>
+      <div class="sub">逢一、逢十多发</div>
+      <div class="time-detail">
+        每月1日（日均29.6人）、10日（24.2人）、20日（22.5人）为高发日，1日超出月均值43%。与抑郁症患者在人生"里程碑"节点的心理活动有关，如不愿开始新的一旬或一月。
+      </div>
+    </div>
+
+    <div class="time-card" onclick="toggleTime(this)">
+      <h4>日内规律</h4>
+      <div class="peak">9:00 与 15:00</div>
+      <div class="sub">白昼型，06:00—19:00占77.2%</div>
+      <div class="time-detail">
+        自杀事件呈明显白昼型分布，09:00和15:00为高峰时点。原因包括：白天人际冲突概率高；气温较高易致情绪波动；许多"吓唬式自杀"者误以为白天更易被发现获救。
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 省份年度柱状图 -->
+  <div class="section-label reveal" style="margin-top:2rem">案例数年度变化（前8省）</div>
+  <div class="bar-chart reveal" id="provinceBars" style="margin-top:1rem"></div>
+
+</section>
+
+<hr class="divider">
+
+<!-- SPATIAL SECTION -->
+<section id="spatial">
+  <div class="section-label reveal">空间特征</div>
+  <h2 class="section-title reveal">自杀死亡的区域分异</h2>
+  <p class="section-body reveal">
+    中国自杀死亡案例的空间格局具有三大特征：地理分布广泛；与人口格局高度一致；与东—中—西经济梯度相吻合。
+    点击下方各区域行可展开详细数据。
+  </p>
+
+  <div class="reveal">
+    <table class="region-table" id="regionTable">
+      <thead>
+        <tr>
+          <th>区域划分</th>
+          <th>子区域</th>
+          <th>案例数</th>
+          <th>占比</th>
+          <th>案例自杀率（1/10万）</th>
+          <th>等级</th>
+        </tr>
+      </thead>
+      <tbody id="regionTbody"></tbody>
+    </table>
+  </div>
+
+  <div class="caveat-box reveal" style="margin-top:1.5rem">
+    <h4>⚠ 县域"H"型高值带</h4>
+    在县域尺度上，存在三条案例自杀率高值带：①大兴安岭→云贵高原（东北—西南走向）；②秦巴山区→大别山区（西北—东南走向）；③苏北海岸→海南岛（东北—西南走向），三者共同构成"H"型分布格局。这三条带均为经济相对贫困的山区，与国家级贫困县集中分布带高度吻合。
+  </div>
+
+</section>
+
+<hr class="divider">
+
+<!-- EVOLUTION SECTION -->
+<section id="evolution">
+  <div class="section-label reveal">时空演化</div>
+  <h2 class="section-title reveal">案例自杀率的时空演变</h2>
+  <p class="section-body reveal">
+    运用马尔科夫概率转移矩阵和空间自相关分析，揭示2000—2018年中国案例自杀率的演化趋势与热点扩散规律。
+  </p>
+
+  <!-- Tab: 三阶段对比 -->
+  <div class="tab-bar reveal">
+    <button class="tab-btn active" onclick="switchTab(this,'evo1')">马尔科夫分析</button>
+    <button class="tab-btn" onclick="switchTab(this,'evo2')">热点空间演化</button>
+    <button class="tab-btn" onclick="switchTab(this,'evo3')">等级转移趋势</button>
+  </div>
+
+  <div class="tab-panel active" id="evo1">
+    <div style="font-size:0.87rem;color:var(--ink-soft);line-height:1.85;max-width:700px">
+      <p style="margin-bottom:1rem">研究将全国2,851个县域按案例自杀率划分为5个等级（K1最低～K5最高），构建马尔科夫概率转移矩阵，结果呈现四大规律：</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem">
+        <div style="background:var(--teal-light);padding:1rem;border-radius:6px">
+          <strong style="color:var(--teal)">① 低等级区占主导</strong><br>
+          三个时段中最低等级区（K1）的累计县数均占绝对优势，说明绝大部分地区自杀率处于低水平。
+        </div>
+        <div style="background:var(--teal-light);padding:1rem;border-radius:6px">
+          <strong style="color:var(--teal)">② 低等级向高等级转移</strong><br>
+          K1县数不断减少，K4、K5县数不断增多，自杀率整体呈上升趋势。
+        </div>
+        <div style="background:var(--teal-light);padding:1rem;border-radius:6px">
+          <strong style="color:var(--teal)">③ 高等级回落概率下降</strong><br>
+          K5转K1的概率从0.8125→0.5000→0.2353逐阶段递减，高自杀率区趋于稳固。
+        </div>
+        <div style="background:var(--teal-light);padding:1rem;border-radius:6px">
+          <strong style="color:var(--teal)">④ 跨级转换较少</strong><br>
+          等级转换多发生在相邻级别，案例自杀率变化较为平稳，无突变现象。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="evo2">
+    <div style="font-size:0.87rem;color:var(--ink-soft);line-height:1.85;max-width:700px">
+      <p style="margin-bottom:1rem">空间自相关分析表明（I₁=0.151, I₂=0.237, I₃=0.335，P&lt;0.001），三个时段均呈集聚型分布，且集聚程度不断增强。热点区演化呈现以下规律：</p>
+      <div style="display:flex;flex-direction:column;gap:0.8rem">
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:1rem;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--teal);font-weight:600">I 阶段<br>2000—2006</div>
+          <div>热点区共4个，<strong>全部分布于东部</strong>：京津唐、长三角、珠三角、闽东南（部分）。全局Moran's I=0.151，空间集聚性尚弱。</div>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:1rem;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--amber);font-weight:600">II 阶段<br>2007—2012</div>
+          <div>热点区增至6个，<strong>中、西部开始出现</strong>新热点；闽东南正式成为稳定热点区。全局I=0.237。</div>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 1fr;gap:1rem;align-items:start;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:1rem">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:0.85rem;color:var(--rose);font-weight:600">III 阶段<br>2013—2018</div>
+          <div>热点区增至7个，<strong>江西北部、内蒙中部</strong>形成新热点，热点由东向西扩散趋势明显。全局I=0.335，集聚性显著增强。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-panel" id="evo3">
+    <div style="font-size:0.87rem;color:var(--ink-soft);line-height:1.85;max-width:700px">
+      <p style="margin-bottom:1.2rem">各等级区在三个时段内的县域数量变化：</p>
+      <div id="evoBarChart" class="bar-chart"></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- ECONOMY SECTION -->
+<section id="economy">
+  <div class="section-label reveal">经济关联</div>
+  <h2 class="section-title reveal">自杀现象与经济发展的关系</h2>
+  <p class="section-body reveal">
+    研究在全国、省域和市域三个尺度上分析了案例自杀率与GDP、人均GDP、城镇化率的统计关系。
+    点击各指标卡片了解详情。
+  </p>
+
+  <div class="econ-grid reveal" id="econGrid">
+    <div class="econ-card active" onclick="showEcon(this, 'gdp')">
+      <div class="econ-indicator">省域尺度</div>
+      <div class="econ-title">自杀案例数 × GDP</div>
+      <div class="econ-r">r = 0.944</div>
+      <div class="econ-desc">全国尺度；P=0.000；高度正相关</div>
+    </div>
+    <div class="econ-card" onclick="showEcon(this, 'pcgdp')">
+      <div class="econ-indicator">市域尺度</div>
+      <div class="econ-title">案例自杀率 × 人均GDP</div>
+      <div class="econ-r">R² = 0.952</div>
+      <div class="econ-desc">2016年对数模型拟合优度</div>
+    </div>
+    <div class="econ-card" onclick="showEcon(this, 'urban')">
+      <div class="econ-indicator">市域尺度</div>
+      <div class="econ-title">案例自杀率 × 城镇化率</div>
+      <div class="econ-r">R² = 0.751</div>
+      <div class="econ-desc">全时期对数模型拟合优度</div>
+    </div>
+  </div>
+
+  <div class="econ-detail-box visible reveal" id="econDetail"></div>
+
+</section>
+
+<hr class="divider">
+
+<!-- FINDINGS SECTION -->
+<section id="findings">
+  <div class="section-label reveal">主要结论</div>
+  <h2 class="section-title reveal">四项核心发现</h2>
+  <p class="section-body reveal">点击各条目展开详细内容。</p>
+
+  <div class="reveal" id="findingsList"></div>
+
+  <div class="caveat-box reveal">
+    <h4>📌 研究局限与展望</h4>
+    本研究存在以下局限：①未分析互联网普及程度对网络自杀数据的影响；②案例自杀率约为标准自杀率的1%，两者不可简单换算；③未能对自然、经济、社会等多因子进行综合建模分析。未来研究将采用结构方程模型对影响因素进行系统分析。
+  </div>
+</section>
+
+<!-- CRISIS FOOTER -->
+<div class="crisis-footer">
+  <h3>💙 如果您或身边的人需要帮助</h3>
+  <p>
+    <span class="hotline">全国心理援助热线：400-161-9995</span>
+    北京心理危机干预中心：010-82951332 &nbsp;|&nbsp; 生命热线：400-821-1215<br>
+    专业的帮助近在咫尺，每一次寻求支持都是勇敢的选择。
+  </p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  本页基于：龚胜生、李春明、肖克梅. 2023. 中国自杀死亡的时空特征及其与经济发展的关系. 热带地理，43（9）：1760-1776.<br>
+  仅用于学术研究展示，原始论文版权归作者及中国知网所有。
+</footer>
+
+
+<script>
+// ── DATA ────────────────────────────────────────
+
+const provinceData = [
+  { name:'浙江', total: 987 }, { name:'广东', total: 925 }, { name:'江苏', total: 864 },
+  { name:'四川', total: 758 }, { name:'福建', total: 717 }, { name:'山东', total: 675 },
+  { name:'北京', total: 628 }, { name:'河北', total: 602 },
+];
+
+const regionData = [
+  { div:'西北—东南', sub:'东南半壁', n:11169, pct:'90.98%', rate:1.03, level:'high' },
+  { div:'西北—东南', sub:'西北半壁', n:1107,  pct:'9.02%',  rate:0.62, level:'low' },
+  { div:'东—中—西', sub:'东部地区', n:6942,  pct:'56.55%', rate:1.15, level:'high' },
+  { div:'东—中—西', sub:'中部地区', n:3387,  pct:'27.59%', rate:0.87, level:'mid' },
+  { div:'东—中—西', sub:'西部地区', n:1947,  pct:'15.86%', rate:0.57, level:'low' },
+  { div:'南方—北方', sub:'南方地区', n:7726,  pct:'62.94%', rate:0.93, level:'mid' },
+  { div:'南方—北方', sub:'北方地区', n:4550,  pct:'37.08%', rate:0.90, level:'mid' },
+];
+
+const regionDetail = {
+  '东南半壁': '以武汉为圆心的"山兰防弧线"以东，人口占全国83.24%，自杀案例高度集中于此区域。',
+  '西北半壁': '人口稀疏，互联网普及率较低，案例数据存在一定遗漏，但自杀率总体较低。',
+  '东部地区': '经济最发达地区，生活节奏快，竞争压力大，城镇化率高，案例自杀率最高（1.15/10万）。',
+  '中部地区': '处于城镇化加速期，收入差距扩大，失地农民群体增加，自杀率居中。',
+  '西部地区': '贫困山区集中，但生活节奏相对缓慢，人均GDP低，对应较低的案例自杀率。',
+  '南方地区': '经济活跃，城镇化水平高，气候炎热；自杀率略高于北方地区。',
+  '北方地区': '部分省份（如黑龙江）呈现人口外流、经济收缩，城镇化对自杀率的影响相对较小。',
+};
+
+const findings = [
+  {
+    title: '时间规律：多尺度显著分异',
+    body: '在年尺度上，2000—2018年总体呈上升趋势；季节上，夏季（5、6月）高发，冬季（2、3月）低发；月内以1日、10日、20日多发（"里程碑"心理效应）；日内自杀事件呈白昼型，T09:00和T15:00为高峰时点（上午和下午上班初始阶段的情绪低落）。',
+    highlight: '77.2%的自杀死亡案例发生在T06:00—19:00的白昼时间'
+  },
+  {
+    title: '空间格局：东南高、西北低，呈"H"型高值带',
+    body: '东南半壁集中了90.98%的案例；东—中—西梯度递减（1.15→0.87→0.57/10万）；县域尺度上，大兴安岭—云贵高原、秦巴山区—大别山区、苏北海岸—海南岛共同构成"H"型高值带，均为经济相对贫困的山区，与国家级贫困县分布高度重合。',
+    highlight: '案例自杀率最高的市：福建厦门（6.7/10万），最低省：西藏（0.07/10万）'
+  },
+  {
+    title: '时空演化：低等级区向高等级区转移，热点由东向西扩散',
+    body: '绝大部分县域属于低等级区，但低等级向高等级转移的概率不断增加。热点区从I阶段（2000—2006）的4个增至III阶段（2013—2018）的7个，由东部向中西部扩散。京津唐、长三角、珠三角始终是自杀热点区。',
+    highlight: '全局Moran\'s I从0.151增至0.335，空间集聚性持续强化'
+  },
+  {
+    title: '经济关联：GDP与城镇化率均与自杀率正相关，城镇化影响更大',
+    body: '全国和省域尺度上，自杀案例数与GDP呈显著正相关（r=0.944）。市域尺度上，案例自杀率与人均GDP（对数模型R²=0.952）、城镇化率（R²=0.751）均呈正相关，且城镇化率的影响大于人均GDP。经济因素对东南沿海的影响远大于西北内陆。这表明经济发展背后隐藏的贫富差距与城镇化带来的地权丧失是自杀率上升的重要原因。',
+    highlight: '政策启示：只有共同富裕之路，才是人民的幸福之路和健康之路'
+  },
+];
+
+const econDetails = {
+  gdp: `
+    <strong>自杀死亡案例数 × GDP（全国/省域尺度）</strong><br><br>
+    在全国尺度上，2000—2018年各年自杀死亡案例数与GDP值呈<strong>显著高度正相关</strong>（r=0.944，P=0.000），
+    即随着全国GDP增加，全国自杀案例数同步上升。<br><br>
+    在省域尺度上，除2004年外，各年均呈显著正相关，且相关系数趋于上升。
+    省域GDP与自杀案例数进行线性回归，拟合优度达<strong>R²=0.586</strong>，
+    说明GDP对自杀案例数的贡献率约为58.6%。<br><br>
+    ⚠ 解读：这并非GDP直接"导致"自杀，而是经济发展过程中伴随的收入差距扩大、社会竞争压力增加、失地农民增多等因素，间接推升了部分群体的自杀风险。
+  `,
+  pcgdp: `
+    <strong>案例自杀率 × 人均GDP（市域尺度）</strong><br><br>
+    2010年（r=0.255，R²=0.610）和2016年（r=0.193，R²=0.952）的案例自杀率与人均GDP均通过99%显著性水平检验，
+    对数模型拟合优度最高。<br><br>
+    GTWR空间地理加权回归显示，人均GDP对自杀率的影响具有<strong>显著空间异质性</strong>：
+    影响最强区域为"福建宁德—河南三门峡—黑龙江大兴安岭"连线以东，即人口密集的东部沿海地区；
+    新疆、西藏、青海及甘肃西部地区影响最弱。<br><br>
+    在东部地区，温饱解决后人们有了更高层次需求，收入不均衡加剧了贫富差距与竞争压力，
+    自杀率反而随人均GDP增长而攀升。
+  `,
+  urban: `
+    <strong>案例自杀率 × 城镇化率（市域尺度）</strong><br><br>
+    除2000年外，案例自杀率与城镇化率呈显著低度正相关（2010年r=0.294，2016年r=0.188，全期r=0.280），
+    对数模型拟合优度：2010年R²=0.613，2016年R²=0.591，全期R²=0.751。<br><br>
+    影响最强区域：承德市—三门峡市—福州市三点连线以东。该区域耕地后备资源匮乏，城镇化推进中
+    失地农民不断增加，生存压力加大。影响最弱区域：新疆、西藏、青海及东北。<br><br>
+    <strong>关键发现：城镇化率对案例自杀率的影响大于人均GDP。</strong>
+    城镇化过程带来的收入差距扩大和失地农民增加，
+    可能是2000—2018年案例自杀率趋于增长的重要驱动因素。
+  `
+};
+
+const evoData = [
+  { stage:'I 阶段 (2000—06)', K1: 16313, K2: 41,  K3: 81,  K4: 103, K5: 33  },
+  { stage:'II 阶段 (2007—12)', K1: 12539, K2: 507, K3: 474, K4: 255, K5: 35  },
+  { stage:'III 阶段 (2013—18)', K1: 11605, K2: 1090,K3: 732, K4: 331, K5: 52  },
+];
+
+// ── INIT ────────────────────────────────────────
+
+// Counter animation
+function animateCount(el, target, duration=1800, suffix='') {
+  let start = 0;
+  const step = Math.ceil(target / (duration / 16));
+  const timer = setInterval(() => {
+    start = Math.min(start + step, target);
+    el.textContent = start.toLocaleString() + suffix;
+    if (start >= target) clearInterval(timer);
+  }, 16);
+}
+
+// Province bars
+(function buildProvinceBars() {
+  const max = provinceData[0].total;
+  const c = document.getElementById('provinceBars');
+  provinceData.forEach(d => {
+    const pct = (d.total / max * 100).toFixed(1);
+    c.innerHTML += `
+      <div class="bar-row">
+        <label>${d.name}</label>
+        <div class="bar-track">
+          <div class="bar-fill" style="width:${pct}%" data-w="${pct}"></div>
+        </div>
+        <span class="bar-val">${d.total}</span>
+      </div>`;
+  });
+})();
+
+// Region table
+(function buildRegionTable() {
+  const tbody = document.getElementById('regionTbody');
+  regionData.forEach((d, i) => {
+    const levelCls = d.level === 'high' ? 'rate-high' : d.level === 'mid' ? 'rate-mid' : 'rate-low';
+    const levelTxt = d.level === 'high' ? '较高' : d.level === 'mid' ? '中等' : '较低';
+    tbody.innerHTML += `
+      <tr onclick="toggleRegion(this, ${i})" style="transition:background 0.15s">
+        <td>${d.div}</td>
+        <td>${d.sub}</td>
+        <td>${d.n.toLocaleString()}</td>
+        <td>${d.pct}</td>
+        <td>${d.rate}</td>
+        <td><span class="rate-pill ${levelCls}">${levelTxt}</span></td>
+      </tr>
+      <tr class="expand-row" id="expand-${i}">
+        <td colspan="6">
+          <div class="expand-content" id="expand-content-${i}">
+            ${regionDetail[d.sub] || ''}
+          </div>
+        </td>
+      </tr>`;
+  });
+})();
+
+// Findings list
+(function buildFindings() {
+  const el = document.getElementById('findingsList');
+  findings.forEach((f, i) => {
+    el.innerHTML += `
+      <div class="finding-item" onclick="toggleFinding(this)">
+        <div class="finding-header">
+          <div class="finding-num">${i+1}</div>
+          <div class="finding-title">${f.title}</div>
+          <div class="finding-arrow">▶</div>
+        </div>
+        <div class="finding-body">
+          <div class="finding-body-inner">
+            ${f.body}
+            <div class="finding-highlight">${f.highlight}</div>
+          </div>
+        </div>
+      </div>`;
+  });
+})();
+
+// Econ detail default
+document.getElementById('econDetail').innerHTML = econDetails.gdp;
+
+// Evo bar chart
+(function buildEvoBars() {
+  const el = document.getElementById('evoBarChart');
+  evoData.forEach(d => {
+    const max = d.K1;
+    ['K1','K2','K3','K4','K5'].forEach(k => {
+      const pct = (d[k] / max * 100).toFixed(1);
+      const colors = { K1:'#2d6a6a', K2:'#3d8b8b', K3:'#f59e0b', K4:'#ef4444', K5:'#991b1b' };
+      el.innerHTML += `
+        <div class="bar-row">
+          <label style="font-size:0.7rem">${d.stage.split(' ')[0]} ${k}</label>
+          <div class="bar-track" style="background:#f0f0f0">
+            <div class="bar-fill" style="width:${pct}%;background:${colors[k]}" data-w="${pct}"></div>
+          </div>
+          <span class="bar-val" style="color:${colors[k]}">${d[k].toLocaleString()}</span>
+        </div>`;
+    });
+  });
+})();
+
+// ── INTERACTIONS ────────────────────────────────
+
+function toggleTime(card) {
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.time-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+function toggleRegion(row, idx) {
+  const content = document.getElementById('expand-content-' + idx);
+  const isOpen = content.classList.contains('open');
+  document.querySelectorAll('.expand-content').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.region-table tr').forEach(r => r.classList.remove('expanded'));
+  if (!isOpen) {
+    content.classList.add('open');
+    row.classList.add('expanded');
+  }
+}
+
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(panelId).classList.add('active');
+  // trigger bars
+  setTimeout(triggerBars, 100);
+}
+
+function showEcon(card, key) {
+  document.querySelectorAll('.econ-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  const box = document.getElementById('econDetail');
+  box.innerHTML = econDetails[key];
+  box.classList.add('visible');
+}
+
+function toggleFinding(item) {
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.finding-item').forEach(f => f.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+// ── SCROLL REVEAL ────────────────────────────────
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      triggerBars();
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// counter observer
+const counterObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCount(document.getElementById('cnt1'), 12276);
+      animateCount(document.getElementById('cnt2'), 2851);
+      counterObs.disconnect();
+    }
+  });
+}, { threshold: 0.5 });
+counterObs.observe(document.querySelector('.stats-strip'));
+
+// bars animation
+let barsTriggered = false;
+function triggerBars() {
+  document.querySelectorAll('.bar-fill[data-w]').forEach(el => {
+    const w = el.dataset.w;
+    requestAnimationFrame(() => { el.style.transform = `scaleX(${parseFloat(w)/100})`; });
+  });
+}
+const barObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting && !barsTriggered) { barsTriggered = true; triggerBars(); } });
+}, { threshold: 0.2 });
+document.getElementById('provinceBars') && barObserver.observe(document.getElementById('provinceBars'));
+</script>
+</body>
+</html>
