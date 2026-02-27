@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>迈克尔·曼 IEMP 权力理论 | 学术综述</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --bg-deep: #0a0e1a;
+    --bg-mid: #111827;
+    --bg-card: #1a2235;
+    --bg-card2: #1e2d45;
+    --accent-gold: #c9a84c;
+    --accent-teal: #2dd4bf;
+    --accent-rose: #f43f5e;
+    --accent-violet: #8b5cf6;
+    --accent-blue: #3b82f6;
+    --text-primary: #e8e8e0;
+    --text-secondary: #9ca3af;
+    --text-muted: #6b7280;
+    --border: rgba(201,168,76,0.2);
+    --border-subtle: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-primary);
+    font-family: 'Noto Sans SC', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* NOISE TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--accent-gold);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 0.2rem;
+    list-style: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.72rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+  .nav-links a:hover { color: var(--accent-gold); background: rgba(201,168,76,0.1); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 80px 2rem 4rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 40%, rgba(139,92,246,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 60%, rgba(59,130,246,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 50% 80%, rgba(201,168,76,0.05) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: rgba(201,168,76,0.12);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--accent-gold);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    animation: fadeInDown 0.8s ease;
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    animation: fadeInUp 0.8s ease 0.1s both;
+  }
+
+  .hero-title span { color: var(--accent-gold); }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--text-secondary);
+    margin-bottom: 0.8rem;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+
+  .hero-en {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease 0.3s both;
+  }
+
+  .hero-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    justify-content: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .chip-i { background: rgba(139,92,246,0.12); border-color: rgba(139,92,246,0.35); color: #a78bfa; }
+  .chip-e { background: rgba(245,158,11,0.12); border-color: rgba(245,158,11,0.35); color: #fbbf24; }
+  .chip-m { background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.35); color: #f87171; }
+  .chip-p { background: rgba(59,130,246,0.12); border-color: rgba(59,130,246,0.35); color: #60a5fa; }
+
+  .scroll-hint {
+    animation: bounce 2s infinite;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    animation: fadeInUp 0.8s ease 0.5s both, bounce 2s ease 1.5s infinite;
+  }
+
+  /* SECTIONS */
+  .main-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  section {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    max-width: 100%;
+    padding: 5rem 0;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-num {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+
+  .section-divider {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+    margin: 1rem auto;
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(201,168,76,0.25);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  /* SECTION 1 - Author */
+  .author-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media(max-width:768px) { .author-grid { grid-template-columns: 1fr; } }
+
+  .author-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    position: sticky;
+    top: 80px;
+  }
+
+  .author-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent-violet), var(--accent-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1rem;
+    border: 3px solid rgba(201,168,76,0.4);
+  }
+
+  .author-name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .author-info {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+
+  .timeline-item {
+    border-left: 2px solid var(--border);
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+  }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+  }
+  .timeline-year {
+    font-size: 0.78rem;
+    color: var(--accent-gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+  .timeline-content { color: var(--text-secondary); font-size: 0.9rem; }
+  .timeline-title { font-weight: 500; color: var(--text-primary); margin-bottom: 0.2rem; }
+
+  /* SECTION 2 - Background */
+  .bg-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 1.5rem;
+  }
+  @media(max-width:900px) { .bg-grid { grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:600px) { .bg-grid { grid-template-columns: 1fr; } }
+
+  .bg-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .bg-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-color, var(--accent-gold));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .bg-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+  .bg-card:hover::before { opacity: 1; }
+  .bg-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .bg-title { font-weight: 600; margin-bottom: 0.5rem; color: var(--text-primary); }
+  .bg-text { color: var(--text-secondary); font-size: 0.88rem; }
+  .bg-expand { display: none; margin-top: 1rem; color: var(--text-secondary); font-size: 0.85rem; background: rgba(255,255,255,0.04); border-radius: 8px; padding: 1rem; }
+  .bg-card.expanded .bg-expand { display: block; }
+
+  /* SECTION 3 - Core Theory Visual */
+  .iemp-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .power-wheel {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    max-width: 90vw;
+  }
+
+  .power-segments {
+    width: 100%;
+    height: 100%;
+  }
+
+  .power-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: var(--bg-deep);
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--accent-gold);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+  }
+
+  .iemp-cards {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 800px;
+  }
+  @media(max-width:600px) { .iemp-cards { grid-template-columns: 1fr; } }
+
+  .iemp-card {
+    border-radius: 16px;
+    padding: 1.8rem;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .iemp-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border-radius: 16px;
+  }
+  .iemp-card:hover::after { opacity: 1; }
+  .iemp-card:hover { transform: scale(1.02); }
+
+  .iemp-i { background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.3); }
+  .iemp-i::after { background: radial-gradient(circle at center, rgba(139,92,246,0.1), transparent); }
+  .iemp-e { background: rgba(245,158,11,0.08); border-color: rgba(245,158,11,0.3); }
+  .iemp-e::after { background: radial-gradient(circle at center, rgba(245,158,11,0.1), transparent); }
+  .iemp-m { background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.3); }
+  .iemp-m::after { background: radial-gradient(circle at center, rgba(239,68,68,0.1), transparent); }
+  .iemp-p { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.3); }
+  .iemp-p::after { background: radial-gradient(circle at center, rgba(59,130,246,0.1), transparent); }
+
+  .iemp-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .iemp-name { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .iemp-desc { color: var(--text-secondary); font-size: 0.85rem; }
+  .iemp-detail { display: none; margin-top: 0.8rem; color: var(--text-secondary); font-size: 0.83rem; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 0.8rem; }
+  .iemp-card.active .iemp-detail { display: block; }
+
+  /* SECTION 4 - Main Content Chart */
+  .chart-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-controls {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .ctrl-btn {
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all 0.2s;
+  }
+  .ctrl-btn.active, .ctrl-btn:hover {
+    background: rgba(201,168,76,0.15);
+    border-color: rgba(201,168,76,0.4);
+    color: var(--accent-gold);
+  }
+
+  .interaction-grid {
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1.5rem;
+  }
+  @media(max-width:700px) { .interaction-grid { grid-template-columns: 1fr; } }
+
+  /* SECTION 5 - Terms */
+  .terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .term-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .term-card:hover { border-color: rgba(201,168,76,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+  .term-header {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.03);
+  }
+  .term-name { font-weight: 600; font-size: 0.95rem; }
+  .term-en { font-size: 0.78rem; color: var(--accent-gold); margin-top: 0.1rem; }
+  .term-toggle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent-gold);
+    font-size: 1rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .term-card.open .term-toggle { transform: rotate(45deg); }
+  .term-body { display: none; padding: 1.2rem 1.5rem; color: var(--text-secondary); font-size: 0.88rem; border-top: 1px solid var(--border-subtle); }
+  .term-card.open .term-body { display: block; }
+
+  /* SECTION 6 - Logic */
+  .logic-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 0;
+  }
+  .logic-tab {
+    padding: 0.7rem 1.2rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    margin-bottom: -1px;
+  }
+  .logic-tab.active { color: var(--accent-gold); border-bottom-color: var(--accent-gold); }
+  .logic-panel { display: none; }
+  .logic-panel.active { display: block; }
+
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+  .flow-node {
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .flow-arrow { color: var(--text-muted); font-size: 1.2rem; }
+
+  .state-matrix {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    gap: 1px;
+    background: var(--border-subtle);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 1.5rem;
+  }
+  .matrix-cell {
+    background: var(--bg-card);
+    padding: 1rem 1.2rem;
+    font-size: 0.88rem;
+  }
+  .matrix-header { background: rgba(201,168,76,0.1); color: var(--accent-gold); font-weight: 600; }
+  .matrix-label { background: rgba(255,255,255,0.04); color: var(--text-secondary); font-weight: 500; }
+
+  /* SECTION 7 - Cases */
+  .cases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .case-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+  .case-card:hover { transform: translateY(-6px); box-shadow: 0 24px 50px rgba(0,0,0,0.5); border-color: rgba(201,168,76,0.2); }
+
+  .case-top {
+    padding: 1.5rem;
+    position: relative;
+  }
+  .case-year {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    color: var(--accent-gold);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+  .case-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+  .case-subtitle { color: var(--text-secondary); font-size: 0.82rem; }
+  .case-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 1rem; }
+  .case-tag {
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+  }
+  .case-body { padding: 1.2rem 1.5rem; border-top: 1px solid var(--border-subtle); display: none; color: var(--text-secondary); font-size: 0.85rem; }
+  .case-card.open .case-body { display: block; }
+
+  /* SECTION 8 - Contribution Radar */
+  .contrib-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  @media(max-width:900px) { .contrib-layout { grid-template-columns: 1fr; } }
+
+  .impact-list { list-style: none; }
+  .impact-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+    align-items: start;
+  }
+  .impact-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .impact-label { font-weight: 500; margin-bottom: 0.2rem; }
+  .impact-desc { color: var(--text-secondary); font-size: 0.85rem; }
+
+  /* SECTION 9 - Limitations */
+  .limit-accordion .limit-item {
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .limit-item:hover { border-color: rgba(244,63,94,0.3); }
+  .limit-header {
+    padding: 1.1rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    user-select: none;
+  }
+  .limit-body { display: none; padding: 0 1.5rem 1.2rem; color: var(--text-secondary); font-size: 0.88rem; }
+  .limit-item.open .limit-body { display: block; }
+  .limit-item.open .limit-toggle { transform: rotate(180deg); }
+  .limit-toggle { transition: transform 0.3s; color: var(--text-muted); }
+
+  /* SECTION 10 - China */
+  .china-timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+  .china-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-gold), transparent);
+  }
+  .china-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+  }
+  .china-item::before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 0.5rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    border: 2px solid var(--bg-deep);
+  }
+  .china-period { font-size: 0.78rem; color: var(--accent-gold); letter-spacing: 0.1em; margin-bottom: 0.4rem; }
+  .china-title { font-weight: 600; margin-bottom: 0.5rem; }
+  .china-text { color: var(--text-secondary); font-size: 0.88rem; }
+
+  /* QUIZ */
+  .quiz-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-top: 2rem;
+  }
+  .quiz-q {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.05rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+  }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.8rem; }
+  .quiz-opt {
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--text-primary);
+    text-align: left;
+    font-family: 'Noto Sans SC', sans-serif;
+  }
+  .quiz-opt:hover { background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+  .quiz-opt.correct { background: rgba(34,197,94,0.15); border-color: rgba(34,197,94,0.4); color: #86efac; }
+  .quiz-opt.wrong { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.4); color: #fca5a5; }
+  .quiz-feedback { margin-top: 1.2rem; padding: 1rem 1.2rem; border-radius: 8px; font-size: 0.88rem; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-nav { display: flex; gap: 1rem; margin-top: 1.5rem; align-items: center; }
+  .quiz-btn {
+    padding: 0.6rem 1.4rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(201,168,76,0.1);
+    color: var(--accent-gold);
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: 'Noto Sans SC', sans-serif;
+    transition: all 0.2s;
+  }
+  .quiz-btn:hover { background: rgba(201,168,76,0.2); }
+  .quiz-progress { color: var(--text-muted); font-size: 0.82rem; margin-left: auto; }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg-mid);
+    border-top: 1px solid var(--border-subtle);
+    padding: 3rem 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    line-height: 2;
+    position: relative;
+    z-index: 1;
+  }
+  footer a { color: var(--accent-gold); text-decoration: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-deep); }
+  ::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 3px; }
+
+  /* POWER INTERACTION SLIDER */
+  .slider-container {
+    margin: 1.5rem 0;
+  }
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+  .power-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border-subtle);
+    outline: none;
+  }
+  .power-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    cursor: pointer;
+    border: 2px solid var(--bg-deep);
+  }
+
+  /* TOOLTIP */
+  .tooltip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dashed var(--accent-gold);
+    color: var(--accent-gold);
+  }
+  .tooltip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 100;
+    max-width: 200px;
+    white-space: normal;
+  }
+  .tooltip:hover::after { opacity: 1; }
+
+  p { margin-bottom: 0.8rem; }
+  p:last-child { margin-bottom: 0; }
+
+  .highlight { color: var(--accent-gold); font-weight: 500; }
+
+  .text-block {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.9;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--accent-gold);
+    padding-left: 1.2rem;
+    margin: 1.5rem 0;
+    color: var(--text-secondary);
+    font-style: italic;
+    font-size: 0.92rem;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">IEMP Theory</div>
+  <ul class="nav-links">
+    <li><a href="#s1">提出者</a></li>
+    <li><a href="#s2">背景</a></li>
+    <li><a href="#s3">定位</a></li>
+    <li><a href="#s4">主要内容</a></li>
+    <li><a href="#s5">专有名词</a></li>
+    <li><a href="#s6">内部逻辑</a></li>
+    <li><a href="#s7">应用案例</a></li>
+    <li><a href="#s8">贡献与影响</a></li>
+    <li><a href="#s9">局限与发展</a></li>
+    <li><a href="#s10">中国应用</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">学术理论综述 · 社会权力研究</div>
+    <h1 class="hero-title">迈克尔·曼<span>基础性权力</span>理论</h1>
+    <p class="hero-subtitle">IEMP 社会权力四来源模型</p>
+    <p class="hero-en">Michael Mann's IEMP Theory of Social Power</p>
+    <div class="hero-chips">
+      <div class="chip chip-i">🧠 意识形态权力 Ideological</div>
+      <div class="chip chip-e">💰 经济权力 Economic</div>
+      <div class="chip chip-m">⚔️ 军事权力 Military</div>
+      <div class="chip chip-p">🏛️ 政治权力 Political</div>
+    </div>
+    <div class="scroll-hint">↓ 向下滚动探索理论全貌</div>
+  </div>
+</div>
+
+<div class="main-content">
+
+<!-- SECTION 1 -->
+<section id="s1" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 01</span>
+    <h2 class="section-title">提出者与核心文献</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">理论的创立者生平、学术贡献与主要著作脉络</p>
+  </div>
+  <div class="author-grid">
+    <div class="author-card">
+      <div class="author-avatar">👨‍🎓</div>
+      <div class="author-name">迈克尔·曼</div>
+      <div style="color:var(--text-muted);font-size:0.78rem;margin-bottom:1rem;">Michael Mann, 1942–</div>
+      <div class="author-info">
+        加州大学洛杉矶分校<br>剑桥大学<br>荣誉教授<br><br>
+        <span class="badge" style="background:rgba(201,168,76,0.15);color:var(--accent-gold);">历史社会学</span>
+        <span class="badge" style="background:rgba(139,92,246,0.15);color:#a78bfa;margin-left:4px;">政治社会学</span>
+      </div>
+    </div>
+    <div>
+      <div class="timeline-item">
+        <div class="timeline-year">1986</div>
+        <div class="timeline-title">《社会权力的来源》第一卷</div>
+        <div class="timeline-content">追溯公元前3000年至1760年的人类社会权力史，确立IEMP分析框架基础。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">1993</div>
+        <div class="timeline-title">《社会权力的来源》第二卷</div>
+        <div class="timeline-content">聚焦1760–1914年欧洲兴起，分析工业革命、民族主义与国家建构的权力互动。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2003–2004</div>
+        <div class="timeline-title">《混乱帝国》《法西斯主义》《民主的黑暗面》</div>
+        <div class="timeline-content">应用IEMP框架分析帝国主义、法西斯运动与暴力政治等历史问题。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2012–2013</div>
+        <div class="timeline-title">《社会权力的来源》第三、四卷</div>
+        <div class="timeline-content">延伸至20世纪全球权力格局演变，涵盖两次世界大战、冷战与全球化。</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2011–今</div>
+        <div class="timeline-title">《二十一世纪的权力》及后续研究</div>
+        <div class="timeline-content">探讨全球化时代四种权力的新形态，即将出版《战争论》以IEMP视角比较战争史。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="s2" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 02</span>
+    <h2 class="section-title">理论提出背景</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">点击卡片展开各背景脉络详细说明</p>
+  </div>
+  <div class="bg-grid">
+    <div class="bg-card" style="--card-color:var(--accent-violet)" onclick="toggleBg(this)">
+      <div class="bg-icon">📚</div>
+      <div class="bg-title">比较历史社会学兴起</div>
+      <div class="bg-text">20世纪下半叶，该领域对传统决定论提出系统性挑战。</div>
+      <div class="bg-expand">斯科奇波尔（Skocpol）、蒂利（Tilly）等学者推动比较历史社会学发展，重新检视国家、阶级与革命的理论化方式，推动曼寻求超越单一决定因素的综合框架。</div>
+    </div>
+    <div class="bg-card" style="--card-color:var(--accent-teal)" onclick="toggleBg(this)">
+      <div class="bg-icon">⚖️</div>
+      <div class="bg-title">马克思与韦伯传统的张力</div>
+      <div class="bg-text">曼试图综合两种学术传统，兼顾物质结构与组织行动。</div>
+      <div class="bg-expand">马克思强调经济生产关系对历史的决定性作用，韦伯关注权力的多元来源与国家的理性化过程。曼将两者纳入同一分析层面，拒绝任何单一维度的化约主义。</div>
+    </div>
+    <div class="bg-card" style="--card-color:var(--accent-rose)" onclick="toggleBg(this)">
+      <div class="bg-icon">🌐</div>
+      <div class="bg-title">冷战时代的社会运动经验</div>
+      <div class="bg-text">军事力量的独立作用促使曼加入第四种权力维度。</div>
+      <div class="bg-expand">冷战期间的军备竞赛、核威慑与非殖民化运动表明，军事力量并非仅是经济或政治的派生物，而是具有独立组织逻辑的权力来源，必须在理论框架中单独考量。</div>
+    </div>
+    <div class="bg-card" style="--card-color:var(--accent-blue)" onclick="toggleBg(this)">
+      <div class="bg-icon">🏛️</div>
+      <div class="bg-title">对决定论历史理论的挑战</div>
+      <div class="bg-text">IEMP理论明确反对"单一权力主导"的化约论。</div>
+      <div class="bg-expand">曼的理论挑战"僵化的社会概念和决定论历史理论"，将社会重新理解为"相互重叠交叉的社会权力网络"而非封闭体系，打破了经济基础决定上层建筑的简单线性逻辑。</div>
+    </div>
+    <div class="bg-card" style="--card-color:var(--accent-gold)" onclick="toggleBg(this)">
+      <div class="bg-icon">🔬</div>
+      <div class="bg-title">组织唯物主义方法论</div>
+      <div class="bg-text">权力被理解为组织能力，而非单纯的物质资源。</div>
+      <div class="bg-expand">曼认为权力来源是"社会互动的网络"而非"社会总体的不同层次"，强调权力的组织手段与制度形式，将历史变迁理解为不同权力网络竞争与合作的产物。</div>
+    </div>
+    <div class="bg-card" style="--card-color:#f59e0b" onclick="toggleBg(this)">
+      <div class="bg-icon">🌍</div>
+      <div class="bg-title">大历史社会学雄心</div>
+      <div class="bg-text">以宏大叙事重写从古代到现代的西方权力史。</div>
+      <div class="bg-expand">曼将西方历史"改写为社会权力增长和转化的历史"，以五千年人类文明史为素材，追踪四种权力网络的起源、扩展与相互转化，构建跨时代的比较分析体系。</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="s3" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 03</span>
+    <h2 class="section-title">理论核心定位</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">点击四象限卡片，深入了解各权力来源的理论定位</p>
+  </div>
+  <div class="iemp-visual">
+    <div class="iemp-cards">
+      <div class="iemp-card iemp-i" onclick="toggleIEMP(this)">
+        <div class="iemp-letter" style="color:#a78bfa">I</div>
+        <div class="iemp-name">意识形态权力</div>
+        <div class="iemp-desc">通过意义、信仰与价值认同动员人群</div>
+        <div class="iemp-detail">意识形态权力源于人类对意义与归属的需求，通过宗教、教育、媒体和话语等渠道运作。它能塑造社会认同与合法性，是最能跨越国界传播的权力形式之一。在曼的分析中，基督教意识形态是欧洲资本主义兴起的"唯一必须因素"。</div>
+      </div>
+      <div class="iemp-card iemp-e" onclick="toggleIEMP(this)">
+        <div class="iemp-letter" style="color:#fbbf24">E</div>
+        <div class="iemp-name">经济权力</div>
+        <div class="iemp-desc">基于资源、生产和财富控制的持续权力</div>
+        <div class="iemp-detail">经济权力根植于日常物质生活，通过市场、生产体系和财富再分配机制运作。它是最为基础和持久的权力来源，但不能简单化约为其他权力的"基础"，而必须与其他三种权力在同一层面分析。</div>
+      </div>
+      <div class="iemp-card iemp-m" onclick="toggleIEMP(this)">
+        <div class="iemp-letter" style="color:#f87171">M</div>
+        <div class="iemp-name">军事权力</div>
+        <div class="iemp-desc">建立于武装力量垄断之上的强制性权力</div>
+        <div class="iemp-detail">军事权力通过战争和暴力的威慑实现目标，是一种震慑性的强制性权力。曼强调军事力量具有独立的组织逻辑，不能简单化约为政治权力的工具。军事征服可直接建立新的政治秩序。</div>
+      </div>
+      <div class="iemp-card iemp-p" onclick="toggleIEMP(this)">
+        <div class="iemp-letter" style="color:#60a5fa">P</div>
+        <div class="iemp-name">政治权力</div>
+        <div class="iemp-desc">通过国家机构进行统治的领土性权力</div>
+        <div class="iemp-detail">政治权力是"国家特有的权力"，依托合法垄断暴力的现代民族国家形式发挥作用。它通过官僚体系和制度进行社会管理，具有明确的领土性，是四种权力中最依赖地理边界的一种。</div>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--text-muted);font-size:0.85rem;max-width:600px">
+      ✦ 四种权力彼此分离又相互转换，如同能量形式，没有哪种具有最终绝对的主导性
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4 -->
+<section id="s4" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 04</span>
+    <h2 class="section-title">理论主要内容</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">通过交互图表探索四种权力在历史阶段的动态变化</p>
+  </div>
+
+  <div class="chart-container">
+    <div style="font-weight:600;margin-bottom:0.5rem;">四种权力历史比重动态分析</div>
+    <div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:1.2rem;">选择历史阶段查看各权力来源的相对比重变化（基于曼的历史分析框架，数值为学术估算）</div>
+    <div class="chart-controls" id="histControls">
+      <button class="ctrl-btn active" onclick="updateHistChart('ancient')">古代文明</button>
+      <button class="ctrl-btn" onclick="updateHistChart('medieval')">中世纪欧洲</button>
+      <button class="ctrl-btn" onclick="updateHistChart('early-modern')">近代早期</button>
+      <button class="ctrl-btn" onclick="updateHistChart('industrial')">工业时代</button>
+      <button class="ctrl-btn" onclick="updateHistChart('contemporary')">当代全球</button>
+    </div>
+    <canvas id="histChart" height="180"></canvas>
+    <div id="histDesc" style="margin-top:1rem;color:var(--text-secondary);font-size:0.85rem;padding:1rem;background:rgba(255,255,255,0.03);border-radius:8px;"></div>
+  </div>
+
+  <div class="interaction-grid">
+    <div class="chart-container">
+      <div style="font-weight:600;margin-bottom:0.3rem;">权力转换网络</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:1rem;">悬停节点查看转换路径</div>
+      <canvas id="networkChart" height="200"></canvas>
+    </div>
+    <div class="chart-container">
+      <div style="font-weight:600;margin-bottom:0.3rem;">专制权力 vs 基础性权力</div>
+      <div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:1rem;">拖动滑块模拟四种国家类型</div>
+      <div class="slider-container">
+        <div class="slider-label">
+          <span>专制权力</span>
+          <span id="despoticVal">50</span>
+        </div>
+        <input type="range" class="power-slider" id="despoticSlider" min="0" max="100" value="50" oninput="updateStateType()">
+      </div>
+      <div class="slider-container">
+        <div class="slider-label">
+          <span>基础性权力</span>
+          <span id="infraVal">50</span>
+        </div>
+        <input type="range" class="power-slider" id="infraSlider" min="0" max="100" value="50" oninput="updateStateType()">
+      </div>
+      <div id="stateTypeDisplay" style="margin-top:1rem;padding:1.2rem;border-radius:10px;text-align:center;border:1px solid;transition:all 0.3s">
+        <div style="font-size:1.3rem;margin-bottom:0.3rem" id="stateTypeEmoji">🏛️</div>
+        <div style="font-weight:600;font-size:1rem" id="stateTypeName">官僚国家</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary);margin-top:0.3rem" id="stateTypeDesc">强行政渗透，弱专断命令</div>
+      </div>
+      <canvas id="stateRadar" height="150" style="margin-top:1rem"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5 -->
+<section id="s5" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 05</span>
+    <h2 class="section-title">核心专有名词释义</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">点击展开每个概念的完整解释</p>
+  </div>
+  <div class="terms-grid">
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">基础性权力</div><div class="term-en">Infrastructural Power</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">国家渗透社会并在其统治疆域内有效贯彻决策的能力，即"通过社会取得的权力"。它表现为行政机构能够触及社会各层面、协调社会生活的程度，是现代民族国家区别于传统政体的关键特征。基础性权力强意味着国家能够有效执行政策、动员资源并协调社会行动。</div>
+    </div>
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">专制性权力</div><div class="term-en">Despotic Power</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">国家精英在不必与社会集团协商的情况下强制行使权力的范围，即"对社会施加的权力"。它反映国家决策时绕过社会中间机构的程度。曼强调专制性权力与基础性权力并不必然同步增长，两者可以独立变化，形成不同的国家类型组合。</div>
+    </div>
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">跨越边界权力</div><div class="term-en">Transboundary Power</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">权力网络超越国家疆域限制的能力。曼指出经济和意识形态网络尤其易于跨越国界，在更广阔空间展开活动，以躲避国家控制并反过来对国家产生制约。这种跨境特性是意识形态与经济权力区别于政治与军事权力的重要特征。</div>
+    </div>
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">社会权力网络</div><div class="term-en">Social Power Networks</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">曼认为社会不是封闭系统，而是由"相互重叠交叉的社会权力网络"构成。这些网络既具有组织机构的属性，也拥有实现目标的制度手段。权力来源被视为社会互动的网络，而非社会总体的不同层次，因此在不同历史阶段，各种权力网络的规模与重要性各有差异。</div>
+    </div>
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">间接权力</div><div class="term-en">Indirect Power</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">通过制度、规范或代理机制发挥的影响力，不直接依赖暴力或命令。这可理解为基础性权力通过社会结构间接影响的能力，例如官僚机构通过法律和制度间接渗透社会，宗教组织通过信仰规范影响社会行为，市场通过价格信号协调经济活动。</div>
+    </div>
+    <div class="term-card" onclick="toggleTerm(this)">
+      <div class="term-header">
+        <div><div class="term-name">封闭/开放网络</div><div class="term-en">Closed/Open Networks</div></div>
+        <div class="term-toggle">+</div>
+      </div>
+      <div class="term-body">权力网络的组织形态差异。封闭网络指关系紧密、信息封锁的集团式结构，如封建贵族联盟、秘密会社；开放网络则指联系松散、信息流通畅通的结构，如市场体系、公共舆论领域。曼理论强调权力的"组织化"，但也注意到开放性与封闭性之间的张力。</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6 -->
+<section id="s6" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 06</span>
+    <h2 class="section-title">理论内部层次逻辑</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">通过标签页浏览理论的内部动力机制</p>
+  </div>
+
+  <div class="logic-tabs">
+    <div class="logic-tab active" onclick="switchLogic(this,'conv')">权力转换机制</div>
+    <div class="logic-tab" onclick="switchLogic(this,'space')">空间扩展机制</div>
+    <div class="logic-tab" onclick="switchLogic(this,'inst')">制度化表现</div>
+    <div class="logic-tab" onclick="switchLogic(this,'state')">四种国家类型</div>
+  </div>
+
+  <div id="panel-conv" class="logic-panel active">
+    <div class="text-block" style="margin-bottom:1.5rem">
+      <p>曼的权力转换机制类似"能量守恒定律"——各类权力形式可以相互转化，但没有任何一种权力形式能够独占主导地位。这种转换机制是历史动态的核心驱动力。</p>
+    </div>
+    <div class="flow-diagram">
+      <div class="flow-node" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171">军事征服</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#60a5fa">政治秩序建立</div>
+    </div>
+    <div class="flow-diagram">
+      <div class="flow-node" style="background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:#fbbf24">资本积累</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#60a5fa">政治体系渗透</div>
+    </div>
+    <div class="flow-diagram">
+      <div class="flow-node" style="background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.4);color:#a78bfa">宗教权威</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.4);color:#f87171">军事动员</div>
+    </div>
+    <div class="flow-diagram">
+      <div class="flow-node" style="background:rgba(59,130,246,0.15);border-color:rgba(59,130,246,0.4);color:#60a5fa">国家权威</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node" style="background:rgba(245,158,11,0.15);border-color:rgba(245,158,11,0.4);color:#fbbf24">经济特权分配</div>
+    </div>
+    <blockquote>权力犹如能量，只能从一种形式"转换"为另一种，没有哪种形式具有最终的绝对主导性。</blockquote>
+  </div>
+
+  <div id="panel-space" class="logic-panel">
+    <div class="text-block" style="margin-bottom:1.5rem">
+      <p>曼的空间扩展机制揭示了不同权力网络在地理尺度上的差异。国家权力依赖于"领土归属"和"中央控制"这两大空间特性，而意识形态、经济网络则往往在全球或跨境范围运作，形成不同尺度的权力场。</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="background:rgba(59,130,246,0.08);border:1px solid rgba(59,130,246,0.25);border-radius:12px;padding:1.5rem">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🗺️</div>
+        <div style="font-weight:600;color:#60a5fa;margin-bottom:0.5rem">领土性权力</div>
+        <div style="color:var(--text-secondary);font-size:0.88rem">政治权力与军事权力高度依赖领土边界，通过行政区划和武装力量控制特定地理空间内的资源与人口。</div>
+        <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge" style="background:rgba(59,130,246,0.15);color:#60a5fa">政治权力</span>
+          <span class="badge" style="background:rgba(239,68,68,0.15);color:#f87171">军事权力</span>
+        </div>
+      </div>
+      <div style="background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.25);border-radius:12px;padding:1.5rem">
+        <div style="font-size:1.5rem;margin-bottom:0.5rem">🌐</div>
+        <div style="font-weight:600;color:#a78bfa;margin-bottom:0.5rem">跨境性权力</div>
+        <div style="color:var(--text-secondary);font-size:0.88rem">意识形态与经济权力具有更强的跨境流动性，可以绕过国家边界在更广阔空间传播，形成跨国网络。</div>
+        <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+          <span class="badge" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态权力</span>
+          <span class="badge" style="background:rgba(245,158,11,0.15);color:#fbbf24">经济权力</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-inst" class="logic-panel">
+    <div class="text-block" style="margin-bottom:1.5rem">
+      <p>权力的制度化与非制度化表现是曼理论的重要维度。权力既可以通过正式制度机构行使，也可以通过非正式网络作用。</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:12px;padding:1.5rem">
+        <div style="font-weight:600;color:var(--accent-gold);margin-bottom:1rem">制度化权力表现</div>
+        <ul style="list-style:none;color:var(--text-secondary);font-size:0.88rem">
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">⚔️ 正规军队与国防体系</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">🏛️ 官僚机构与行政体系</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">📜 法律法规与司法机构</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">⛪ 宗教组织与教会体系</li>
+          <li style="padding:0.3rem 0">🏦 金融机构与市场规则</li>
+        </ul>
+      </div>
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border-subtle);border-radius:12px;padding:1.5rem">
+        <div style="font-weight:600;margin-bottom:1rem">非制度化权力表现</div>
+        <ul style="list-style:none;color:var(--text-secondary);font-size:0.88rem">
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">👥 家族势力与宗族网络</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">🤝 秘密会社与非正式联盟</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">📣 大众运动与社会动员</li>
+          <li style="padding:0.3rem 0;border-bottom:1px solid rgba(255,255,255,0.05)">💬 舆论话语与媒体影响</li>
+          <li style="padding:0.3rem 0">🌐 跨国公民社会网络</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-state" class="logic-panel">
+    <div class="text-block" style="margin-bottom:1.5rem">
+      <p>曼根据专制性权力与基础性权力的强弱组合，提出四种理想型国家类型。这一矩阵模型是比较政治学的重要分析工具。</p>
+    </div>
+    <div class="state-matrix">
+      <div class="matrix-cell matrix-header" style="grid-column:1;grid-row:1"></div>
+      <div class="matrix-cell matrix-header" style="text-align:center">基础性权力 弱</div>
+      <div class="matrix-cell matrix-header" style="text-align:center">基础性权力 强</div>
+      <div class="matrix-cell matrix-label">专制权力 弱</div>
+      <div class="matrix-cell">
+        <div style="font-weight:600;color:var(--text-muted);margin-bottom:0.3rem">🏰 封建国家</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary)">专制与基础权力均弱，多为分散领主统治，中央权威极为有限。</div>
+      </div>
+      <div class="matrix-cell">
+        <div style="font-weight:600;color:var(--accent-blue);margin-bottom:0.3rem">🏛️ 官僚国家</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary)">强调中央集权行政体系，国家渗透能力强但无需专断命令即可治理。</div>
+      </div>
+      <div class="matrix-cell matrix-label">专制权力 强</div>
+      <div class="matrix-cell">
+        <div style="font-weight:600;color:var(--accent-rose);margin-bottom:0.3rem">👑 帝国国家</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary)">专制权力强而基础权力弱，国家依靠武力而非行政体系控制疆域。</div>
+      </div>
+      <div class="matrix-cell">
+        <div style="font-weight:600;color:var(--accent-gold);margin-bottom:0.3rem">🔐 威权国家</div>
+        <div style="font-size:0.82rem;color:var(--text-secondary)">兼备高强度行政渗透与直接命令权力，曼认为此类政体往往较为稳定。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 7 -->
+<section id="s7" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 07</span>
+    <h2 class="section-title">典型应用案例</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">点击案例卡片展开详细分析</p>
+  </div>
+  <div class="cases-grid">
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">第一卷 · 1986</div>
+        <div class="case-title">基督教与欧洲资本主义兴起</div>
+        <div class="case-subtitle">意识形态权力的历史作用</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态</span>
+          <span class="case-tag" style="background:rgba(245,158,11,0.15);color:#fbbf24">经济</span>
+        </div>
+      </div>
+      <div class="case-body">曼分析了基督教意识形态如何为欧洲社会创造信任基础，从而促进了资本主义的萌芽。他指出，尽管经济发展重要，但意识形态是"唯一的必须因素"，基督教为资本主义欧洲奠定了和平社会环境，这是其他文明所缺乏的。</div>
+    </div>
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">《法西斯主义》· 2004</div>
+        <div class="case-title">一战后欧洲法西斯运动兴起</div>
+        <div class="case-subtitle">四种权力的结构性危机分析</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态</span>
+          <span class="case-tag" style="background:rgba(239,68,68,0.15);color:#f87171">军事</span>
+          <span class="case-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa">政治</span>
+        </div>
+      </div>
+      <div class="case-body">曼运用IEMP模型解释了一战后欧洲法西斯运动的兴起：战争破坏了政治权力的合法性，军事权力网络未能平稳整合回社会，经济危机削弱了传统意识形态的凝聚力，从而为法西斯动员提供了土壤。</div>
+    </div>
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">《民主的黑暗面》· 2004</div>
+        <div class="case-title">现代国家种族灭绝比较研究</div>
+        <div class="case-subtitle">亚美尼亚·大屠杀·柬埔寨</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa">政治</span>
+          <span class="case-tag" style="background:rgba(239,68,68,0.15);color:#f87171">军事</span>
+          <span class="case-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态</span>
+        </div>
+      </div>
+      <div class="case-body">通过比较亚美尼亚种族灭绝、纳粹大屠杀和柬埔寨屠杀，曼揭示了民主政治如何在特定条件下滑向族裔清洗：当民族主义意识形态与国家政治权力、军事力量结合，少数群体就面临系统性暴力风险。</div>
+    </div>
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">《社会革命》· 斯科奇波尔</div>
+        <div class="case-title">法国·俄国·中国社会革命</div>
+        <div class="case-subtitle">后继学者的IEMP框架应用</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa">政治</span>
+          <span class="case-tag" style="background:rgba(245,158,11,0.15);color:#fbbf24">经济</span>
+          <span class="case-tag" style="background:rgba(239,68,68,0.15);color:#f87171">军事</span>
+        </div>
+      </div>
+      <div class="case-body">斯科奇波尔的社会革命比较研究可被视为四种权力网络互动分析的典范。国家财政危机（经济）、军事失败、政治精英分裂与农民动员（意识形态/经济）的特定组合，解释了革命发生的结构性条件。</div>
+    </div>
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">《混乱帝国》· 2003</div>
+        <div class="case-title">美国帝国主义的权力悖论</div>
+        <div class="case-subtitle">当代全球霸权的IEMP分析</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(239,68,68,0.15);color:#f87171">军事</span>
+          <span class="case-tag" style="background:rgba(245,158,11,0.15);color:#fbbf24">经济</span>
+          <span class="case-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态</span>
+        </div>
+      </div>
+      <div class="case-body">曼分析了小布什政府的单边主义外交政策，指出美国虽拥有压倒性军事与经济优势，但其意识形态号召力和政治软权力却遭受重大侵蚀，展示了四种权力不协调发展的"混乱"状态。</div>
+    </div>
+    <div class="case-card" onclick="toggleCase(this)">
+      <div class="case-top">
+        <div class="case-year">《二十一世纪的权力》· 2011</div>
+        <div class="case-title">全球化时代的权力网络重构</div>
+        <div class="case-subtitle">超越民族国家的权力分析</div>
+        <div class="case-tags">
+          <span class="case-tag" style="background:rgba(245,158,11,0.15);color:#fbbf24">经济</span>
+          <span class="case-tag" style="background:rgba(139,92,246,0.15);color:#a78bfa">意识形态</span>
+          <span class="case-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa">政治</span>
+        </div>
+      </div>
+      <div class="case-body">曼探讨了全球化如何重塑四种权力的分布格局：经济网络的跨国化、互联网对意识形态传播的革命性影响、全球治理机构对政治权力的分散，以及非国家行为体在军事领域的崛起。</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 8 -->
+<section id="s8" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 08</span>
+    <h2 class="section-title">理论贡献与影响</h2>
+    <div class="section-divider"></div>
+  </div>
+  <div class="contrib-layout">
+    <div>
+      <ul class="impact-list">
+        <li class="impact-item">
+          <div class="impact-icon">🏆</div>
+          <div><div class="impact-label">学术荣誉</div><div class="impact-desc">美国社会学协会1988年评选第一卷为"杰出学术出版物奖"，称其规模宏大、雄心勃勃。</div></div>
+        </li>
+        <li class="impact-item">
+          <div class="impact-icon">🌿</div>
+          <div><div class="impact-label">国家-社会关系研究</div><div class="impact-desc">曼强调基础性权力的双向特征，启发了米格代尔"社会中的国家"理论与彼得·埃文斯的"嵌入型自主性"观点。</div></div>
+        </li>
+        <li class="impact-item">
+          <div class="impact-icon">📊</div>
+          <div><div class="impact-label">国家能力研究</div><div class="impact-desc">王绍光等学者从提取能力角度研究中国国家能力，为发展中国家权力研究提供了引领性工具。</div></div>
+        </li>
+        <li class="impact-item">
+          <div class="impact-icon">🔁</div>
+          <div><div class="impact-label">历史社会学方法论</div><div class="impact-desc">将社会学重新构想为"对社会权力的研究"，推动了宏观历史比较分析的方法论革新。</div></div>
+        </li>
+        <li class="impact-item">
+          <div class="impact-icon">🌐</div>
+          <div><div class="impact-label">政治地理学</div><div class="impact-desc">权力网络的空间分布视角，启发了跨国治理与多层级权力研究的地理学讨论。</div></div>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <div class="chart-container" style="margin:0">
+        <div style="font-weight:600;margin-bottom:0.5rem;">学术影响力雷达图</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:1rem;">IEMP理论在各学科领域的影响程度（主观估值）</div>
+        <canvas id="radarChart" height="260"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 9 -->
+<section id="s9" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 09</span>
+    <h2 class="section-title">局限与后续发展</h2>
+    <div class="section-divider"></div>
+    <p class="section-desc">展开了解各批评观点与理论后续演进</p>
+  </div>
+  <div class="limit-accordion">
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>🔍 微观层面关注不足</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">曼的宏大视角对微观层面关注不足，预先界定了权力参与者（官僚、军队、教会等），忽视了普通民众和非正式网络的权力作用。怀特迈耶尔研究发现，大量权力实际上是通过普通人和个人网络掌握的，超出了曼模型的涵盖范围。</div>
+    </div>
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>⚖️ 二分模型过于简化</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">曼对专制权力和基础性权力的二分被认为过于简单：两者并非必然互斥，独裁体制常常削弱社会支持从而反噬基础性权力。现实中专制性权力与基础性权力的关系远比二维矩阵所呈现的复杂。</div>
+    </div>
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>📚 批评者：早产不成熟（蒂利）</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">查尔斯·蒂利等学者批评该理论在经验验证方面存在缺陷，历史材料的选取有时带有目的论色彩，理论框架内部分析单元与因果机制界定不够清晰。西德尼·塔罗则评价该书"充满争议却不可不读"。</div>
+    </div>
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>🌱 后续发展：实证测量（索伊弗等）</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">后续学者通过实证方法测量基础性权力强度，索伊弗（Soifer）等人尝试将基础性权力概念操作化为可量化指标，包括教育渗透率、税收能力、行政人员密度等，推动了从理论到实证的转化。</div>
+    </div>
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>💬 与福柯权力理论的对话</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">部分学者将曼的IEMP框架与福柯的规训权力、话语权力理论相结合，探讨权力在治理技术、主体建构、知识-权力关系层面的微观运作，弥补了曼在日常权力实践层面的分析空白。</div>
+    </div>
+    <div class="limit-item">
+      <div class="limit-header" onclick="toggleLimit(this)">
+        <span>🌐 全球化对理论的挑战</span>
+        <span class="limit-toggle">▼</span>
+      </div>
+      <div class="limit-body">全球化深化使经济和意识形态网络的跨国性大幅增强，数字技术重塑了意识形态权力的传播结构，非国家行为体的兴起挑战了政治与军事权力的国家垄断，这些变化要求对IEMP框架进行系统性更新。</div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 10 -->
+<section id="s10" class="fade-in">
+  <div class="section-header">
+    <span class="section-num">Section 10</span>
+    <h2 class="section-title">在中国历史与当代研究中的应用和演化</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:3rem">
+    <div class="china-timeline">
+      <div class="china-item">
+        <div class="china-period">中国古代史研究</div>
+        <div class="china-title">赵鼎新与中西历史的IEMP比较</div>
+        <div class="china-text">学者赵鼎新借用四种权力来源模型解释中西差异，认为意识形态在中国政治转型中作用较弱、政治权力最强。曼本人回应指出，思想支持在基础性权力中的作用不能忽视。</div>
+      </div>
+      <div class="china-item">
+        <div class="china-period">改革开放以来</div>
+        <div class="china-title">国家能力建设的"基础性权力"视角</div>
+        <div class="china-text">李强等学者将"基础性权力"重新命名为"国家能力"，认为现代国家建设需在缩小专制权力的同时扩大基础性权力，以行政体系渗透社会为核心指标。</div>
+      </div>
+      <div class="china-item">
+        <div class="china-period">王绍光的贡献</div>
+        <div class="china-title">提取能力与分配能力研究</div>
+        <div class="china-text">王绍光从曼的框架中提取"提取能力"角度研究中国国家能力，聚焦财政汲取、资源动员等可量化维度，推动了理论的本土化实证应用。</div>
+      </div>
+      <div class="china-item">
+        <div class="china-period">当代中国治理研究</div>
+        <div class="china-title">城镇化与基础性权力增强</div>
+        <div class="china-text">学者研究发现，近30年中国城镇化进程中，国家通过提升财政能力、完善社区治理等机制大幅增强了基础性权力，从而维持了政治稳定，为IEMP框架提供了新的实证案例。</div>
+      </div>
+    </div>
+    <div>
+      <div class="chart-container">
+        <div style="font-weight:600;margin-bottom:0.5rem;">中国情境下四种权力相对重要性</div>
+        <div style="color:var(--text-muted);font-size:0.8rem;margin-bottom:1rem;">点击按钮切换历史阶段</div>
+        <div class="chart-controls" id="chinaControls">
+          <button class="ctrl-btn active" onclick="updateChinaChart('imperial')">帝制时代</button>
+          <button class="ctrl-btn" onclick="updateChinaChart('republic')">民国时期</button>
+          <button class="ctrl-btn" onclick="updateChinaChart('prc-early')">建国初期</button>
+          <button class="ctrl-btn" onclick="updateChinaChart('reform')">改革开放后</button>
+        </div>
+        <canvas id="chinaChart" height="200"></canvas>
+        <div id="chinaDesc" style="margin-top:1rem;color:var(--text-secondary);font-size:0.83rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="quiz-section">
+    <div style="font-family:'Noto Serif SC',serif;font-size:1.2rem;font-weight:700;margin-bottom:0.3rem;color:var(--accent-gold)">📝 知识测试</div>
+    <div style="color:var(--text-muted);font-size:0.82rem;margin-bottom:1.5rem;">测试你对迈克尔·曼IEMP理论的理解</div>
+    <div id="quizContainer">
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-options" id="quizOpts"></div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav">
+        <button class="quiz-btn" onclick="prevQ()">← 上一题</button>
+        <button class="quiz-btn" onclick="nextQ()">下一题 →</button>
+        <div class="quiz-progress" id="quizProg"></div>
+      </div>
+    </div>
+    <div id="quizResult" style="display:none;text-align:center;padding:2rem">
+      <div style="font-size:3rem;margin-bottom:0.5rem" id="resultEmoji"></div>
+      <div style="font-size:1.3rem;font-weight:600;margin-bottom:0.5rem" id="resultTitle"></div>
+      <div style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1.5rem" id="resultDesc"></div>
+      <button class="quiz-btn" onclick="restartQuiz()">重新测试</button>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main-content -->
+
+<!-- FOOTER -->
+<footer>
+  <div style="font-family:'Noto Serif SC',serif;font-size:1rem;color:var(--accent-gold);margin-bottom:0.5rem">
+    迈克尔·曼 IEMP 社会权力理论 | 学术综述
+  </div>
+  <div>
+    理论来源：Michael Mann, <em>The Sources of Social Power</em> (1986–2013) · 四卷本著作
+  </div>
+  <div style="margin-top:0.5rem">
+    参考文献：Cambridge University Press · 南京大学学报 · 豆瓣书评资料库
+  </div>
+  <div style="margin-top:1rem;color:var(--border)">
+    ✦ 本网页为学术展示目的制作，内容基于已有学术文献整理
+  </div>
+</footer>
+
+<script>
+// ====================== DATA ======================
+const histData = {
+  'ancient': {
+    label: '古代文明（公元前3000年—公元500年）',
+    vals: [40, 20, 30, 10],
+    desc: '古代文明中，宗教与意识形态权力占主导，神权政治结构将意识形态与政治权力深度融合。经济权力受限于农业生产力，军事权力随帝国扩张而增强。'
+  },
+  'medieval': {
+    label: '中世纪欧洲（500—1500年）',
+    vals: [50, 15, 20, 15],
+    desc: '中世纪欧洲以教会为中心的意识形态权力高度发展，封建制度使政治权力极度分散，军事力量在贵族网络间流动，经济仍以庄园为基础。'
+  },
+  'early-modern': {
+    label: '近代早期（1500—1800年）',
+    vals: [25, 25, 25, 25],
+    desc: '近代早期四种权力趋于均衡：民族国家兴起强化政治权力，商业资本主义推动经济权力，宗教改革重塑意识形态，常备军强化军事权力。'
+  },
+  'industrial': {
+    label: '工业时代（1800—1945年）',
+    vals: [15, 40, 25, 20],
+    desc: '工业革命使经济权力急剧扩张，资本主义生产关系重构社会秩序。民族主义意识形态驱动帝国主义扩张，两次世界大战将军事权力推向极端。'
+  },
+  'contemporary': {
+    label: '当代全球（1945年至今）',
+    vals: [30, 35, 15, 20],
+    desc: '全球化时代经济权力持续领先，意识形态权力因媒体革命与互联网而复苏，政治权力面临跨国治理的分散化压力，军事权力随核威慑进入相对稳定。'
+  }
+};
+
+const chinaData = {
+  'imperial': {
+    label: '帝制时代',
+    vals: [45, 20, 15, 20],
+    desc: '儒家意识形态作为统治合法性的核心支柱，与政治权力深度融合。军事力量以边疆防御为主，商业经济受到"重农抑商"政策限制。'
+  },
+  'republic': {
+    label: '民国时期',
+    vals: [20, 20, 40, 20],
+    desc: '军事权力高度分散，军阀混战格局下各路势力争夺政治主导权。意识形态领域呈现多元竞争，民族主义、自由主义与共产主义三足鼎立。'
+  },
+  'prc-early': {
+    label: '建国初期',
+    vals: [35, 15, 20, 30],
+    desc: '革命意识形态与党的政治组织高度统一，党国体制强化政治与意识形态权力的协同，经济在计划体制下服从政治逻辑，军事权力嵌入党的领导结构。'
+  },
+  'reform': {
+    label: '改革开放后',
+    vals: [20, 40, 10, 30],
+    desc: '市场化改革推动经济权力显著扩张，政治权力通过强化法治和行政能力持续增强基础性权力，意识形态趋于多元，军事权力保持相对稳定。'
+  }
+};
+
+const quizData = [
+  {
+    q: '在迈克尔·曼的IEMP理论框架中，"基础性权力"（Infrastructural Power）最准确的定义是什么？',
+    opts: ['国家对其领土的军事控制能力', '国家渗透社会并有效贯彻决策的能力', '国家精英不经协商强制行权的范围', '经济精英通过市场影响政策的能力'],
+    ans: 1,
+    exp: '基础性权力是国家"通过社会取得的权力"，表现为行政机构触及社会各层面的能力，是现代国家区别于传统政体的关键特征。'
+  },
+  {
+    q: '曼认为，意识形态权力在欧洲资本主义兴起过程中的地位是什么？',
+    opts: ['可有可无的上层建筑', '经济权力的从属工具', '唯一的必须因素', '与军事权力等同的因素'],
+    ans: 2,
+    exp: '曼指出，尽管经济发展重要，但基督教意识形态是"唯一的必须因素"，它为欧洲资本主义提供了信任基础和和平社会环境。'
+  },
+  {
+    q: '根据曼的两种国家权力矩阵，"专制权力强、基础性权力弱"对应的是哪种国家类型？',
+    opts: ['封建国家', '官僚国家', '帝国国家', '威权国家'],
+    ans: 2,
+    exp: '帝国国家的特征是专制权力强而基础性权力弱，国家依靠武力而非行政体系控制疆域，如古代罗马帝国边疆地区。'
+  },
+  {
+    q: '曼提出哪两种权力网络因其"跨越国界"的特性而区别于政治和军事权力？',
+    opts: ['法律权力与文化权力', '意识形态权力与经济权力', '经济权力与军事权力', '政治权力与意识形态权力'],
+    ans: 1,
+    exp: '曼指出，意识形态和经济网络往往跨越国界进行活动，可躲避国家控制，这使国家权力与社会权力之间长期存在张力。'
+  },
+  {
+    q: '在中国学术语境中，王绍光研究中国国家能力时，主要从曼框架中提取了哪个核心概念？',
+    opts: ['专制性权力', '提取能力', '跨越边界权力', '意识形态合法性'],
+    ans: 1,
+    exp: '王绍光从提取能力角度研究中国国家能力，聚焦财政汲取与资源动员，是IEMP理论在中国研究中本土化应用的代表。'
+  }
+];
+
+// ====================== CHARTS ======================
+let histChart, chinaChart, radarChart, stateRadar;
+
+window.addEventListener('load', () => {
+  initHistChart();
+  initChinaChart();
+  initRadarChart();
+  initStateRadar();
+  initQuiz();
+  setupIntersectionObserver();
+});
+
+function getChartColors() {
+  return {
+    i: 'rgba(139,92,246,0.8)',
+    e: 'rgba(245,158,11,0.8)',
+    m: 'rgba(239,68,68,0.8)',
+    p: 'rgba(59,130,246,0.8)',
+  };
+}
+
+function initHistChart() {
+  const ctx = document.getElementById('histChart').getContext('2d');
+  const c = getChartColors();
+  const d = histData['ancient'];
+  histChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['意识形态权力', '经济权力', '军事权力', '政治权力'],
+      datasets: [{
+        data: d.vals,
+        backgroundColor: [c.i, c.e, c.m, c.p],
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ${ctx.raw}% 相对比重`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#9ca3af', font: { size: 11 } }
+        },
+        y: {
+          max: 60,
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          ticks: { color: '#9ca3af', callback: v => v + '%' }
+        }
+      },
+      animation: { duration: 600 }
+    }
+  });
+  document.getElementById('histDesc').textContent = d.desc;
+}
+
+function updateHistChart(key) {
+  document.querySelectorAll('#histControls .ctrl-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const d = histData[key];
+  histChart.data.datasets[0].data = d.vals;
+  histChart.update();
+  document.getElementById('histDesc').textContent = d.desc;
+}
+
+function initChinaChart() {
+  const ctx = document.getElementById('chinaChart').getContext('2d');
+  const c = getChartColors();
+  const d = chinaData['imperial'];
+  chinaChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['意识形态权力', '经济权力', '军事权力', '政治权力'],
+      datasets: [{
+        data: d.vals,
+        backgroundColor: [c.i, c.e, c.m, c.p],
+        borderColor: 'transparent',
+        hoverOffset: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'bottom', labels: { color: '#9ca3af', padding: 12, font: { size: 11 } } }
+      },
+      animation: { duration: 600 }
+    }
+  });
+  document.getElementById('chinaDesc').textContent = d.desc;
+}
+
+function updateChinaChart(key) {
+  document.querySelectorAll('#chinaControls .ctrl-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const d = chinaData[key];
+  chinaChart.data.datasets[0].data = d.vals;
+  chinaChart.update();
+  document.getElementById('chinaDesc').textContent = d.desc;
+}
+
+function initRadarChart() {
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['历史社会学', '比较政治学', '政治地理学', '国际关系', '发展研究', '国家理论'],
+      datasets: [{
+        label: 'IEMP理论影响力',
+        data: [95, 85, 65, 70, 80, 90],
+        backgroundColor: 'rgba(201,168,76,0.15)',
+        borderColor: 'rgba(201,168,76,0.7)',
+        pointBackgroundColor: 'rgba(201,168,76,0.9)',
+        pointRadius: 4,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          max: 100,
+          min: 0,
+          grid: { color: 'rgba(255,255,255,0.08)' },
+          angleLines: { color: 'rgba(255,255,255,0.08)' },
+          ticks: { display: false },
+          pointLabels: { color: '#9ca3af', font: { size: 11 } }
+        }
+      }
+    }
+  });
+}
+
+function initStateRadar() {
+  const ctx = document.getElementById('stateRadar').getContext('2d');
+  stateRadar = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['行政覆盖', '政策执行', '命令强制', '社会渗透'],
+      datasets: [{
+        label: '国家权力分布',
+        data: [50, 50, 50, 50],
+        backgroundColor: 'rgba(59,130,246,0.15)',
+        borderColor: 'rgba(59,130,246,0.6)',
+        pointBackgroundColor: 'rgba(59,130,246,0.9)',
+        pointRadius: 3,
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        r: {
+          max: 100,
+          min: 0,
+          grid: { color: 'rgba(255,255,255,0.06)' },
+          angleLines: { color: 'rgba(255,255,255,0.06)' },
+          ticks: { display: false },
+          pointLabels: { color: '#9ca3af', font: { size: 10 } }
+        }
+      }
+    }
+  });
+  updateStateType();
+}
+
+function updateStateType() {
+  const d = parseInt(document.getElementById('despoticSlider').value);
+  const i = parseInt(document.getElementById('infraSlider').value);
+  document.getElementById('despoticVal').textContent = d;
+  document.getElementById('infraVal').textContent = i;
+
+  let type, emoji, desc, color, borderColor;
+  if (d < 50 && i < 50) {
+    type = '封建国家'; emoji = '🏰'; desc = '专制与基础权力均弱，分散领主统治'; color = 'rgba(107,114,128,0.15)'; borderColor = 'rgba(107,114,128,0.4)';
+  } else if (d >= 50 && i < 50) {
+    type = '帝国国家'; emoji = '👑'; desc = '武力专制，行政体系薄弱'; color = 'rgba(239,68,68,0.12)'; borderColor = 'rgba(239,68,68,0.4)';
+  } else if (d < 50 && i >= 50) {
+    type = '官僚国家'; emoji = '🏛️'; desc = '强行政渗透，协商式治理'; color = 'rgba(59,130,246,0.12)'; borderColor = 'rgba(59,130,246,0.4)';
+  } else {
+    type = '威权国家'; emoji = '🔐'; desc = '兼备强渗透与强专制，较为稳定'; color = 'rgba(201,168,76,0.12)'; borderColor = 'rgba(201,168,76,0.4)';
+  }
+
+  const disp = document.getElementById('stateTypeDisplay');
+  disp.style.background = color;
+  disp.style.borderColor = borderColor;
+  document.getElementById('stateTypeEmoji').textContent = emoji;
+  document.getElementById('stateTypeName').textContent = type;
+  document.getElementById('stateTypeDesc').textContent = desc;
+
+  // Update radar
+  const admin = Math.round(i * 0.8 + d * 0.2);
+  const exec = Math.round(i * 0.6 + d * 0.4);
+  const coerce = Math.round(d * 0.8 + i * 0.1);
+  const social = Math.round(i * 0.9);
+  stateRadar.data.datasets[0].data = [admin, exec, coerce, social];
+  stateRadar.update();
+}
+
+// ====================== INTERACTIONS ======================
+function toggleBg(el) {
+  el.classList.toggle('expanded');
+}
+
+function toggleIEMP(el) {
+  el.classList.toggle('active');
+}
+
+function toggleTerm(el) {
+  el.classList.toggle('open');
+}
+
+function switchLogic(tab, panelId) {
+  document.querySelectorAll('.logic-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.logic-panel').forEach(p => p.classList.remove('active'));
+  tab.classList.add('active');
+  document.getElementById('panel-' + panelId).classList.add('active');
+}
+
+function toggleCase(el) {
+  el.classList.toggle('open');
+}
+
+function toggleLimit(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+// ====================== QUIZ ======================
+let currentQ = 0;
+let answered = new Array(quizData.length).fill(null);
+
+function initQuiz() {
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quizData[currentQ];
+  document.getElementById('quizQ').textContent = (currentQ + 1) + '. ' + q.q;
+  const opts = document.getElementById('quizOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i);
+    if (answered[currentQ] !== null) {
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === answered[currentQ]) btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+    opts.appendChild(btn);
+  });
+  const fb = document.getElementById('quizFeedback');
+  if (answered[currentQ] !== null) {
+    fb.className = 'quiz-feedback show';
+    fb.style.background = answered[currentQ] === q.ans ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
+    fb.style.border = '1px solid ' + (answered[currentQ] === q.ans ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.3)');
+    fb.textContent = (answered[currentQ] === q.ans ? '✓ 正确！' : '✗ 错误。') + ' ' + q.exp;
+  } else {
+    fb.className = 'quiz-feedback';
+  }
+  document.getElementById('quizProg').textContent = (currentQ + 1) + ' / ' + quizData.length;
+}
+
+function selectAnswer(i) {
+  if (answered[currentQ] !== null) return;
+  answered[currentQ] = i;
+  renderQuestion();
+  if (answered.every(a => a !== null)) {
+    setTimeout(showResult, 800);
+  }
+}
+
+function showResult() {
+  const score = answered.filter((a, i) => a === quizData[i].ans).length;
+  document.getElementById('quizContainer').style.display = 'none';
+  const res = document.getElementById('quizResult');
+  res.style.display = 'block';
+  const pct = score / quizData.length;
+  let emoji, title, desc;
+  if (pct >= 0.8) { emoji = '🏆'; title = `优秀！${score}/${quizData.length} 题正确`; desc = '你对IEMP理论有深入的理解！'; }
+  else if (pct >= 0.6) { emoji = '📚'; title = `良好！${score}/${quizData.length} 题正确`; desc = '基本掌握，建议复习部分概念。'; }
+  else { emoji = '💡'; title = `加油！${score}/${quizData.length} 题正确`; desc = '建议重新阅读各章节内容深化理解。'; }
+  document.getElementById('resultEmoji').textContent = emoji;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultDesc').textContent = desc;
+}
+
+function restartQuiz() {
+  answered = new Array(quizData.length).fill(null);
+  currentQ = 0;
+  document.getElementById('quizResult').style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  renderQuestion();
+}
+
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function nextQ() {
+  if (currentQ < quizData.length - 1) { currentQ++; renderQuestion(); }
+}
+
+// ====================== SCROLL ANIMATION ======================
+function setupIntersectionObserver() {
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+}
+</script>
+</body>
+</html>
